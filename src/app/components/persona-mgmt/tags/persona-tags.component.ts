@@ -101,6 +101,7 @@ export class PersonaTagsComponent implements OnInit {
     if (this.tagedDocs) {
       this.selectedDocs = [];
       this.globalService.selectedDocs.subscribe(res => {
+        console.log("res", res);
         if (res.length > 0) {
           this.addDocs();
         }
@@ -141,9 +142,8 @@ export class PersonaTagsComponent implements OnInit {
           this.tagedDocs = res;
         }
       });
-    let emptyDocs = [];
-    this.globalService.setSelectedDocs(emptyDocs);
-    this.getAllDocs();
+    let emptyUsers = [];
+    this.globalService.setSelectedDocs(emptyUsers);
   }
 
   public removeDoc(event: any) {

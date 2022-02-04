@@ -1,0 +1,39 @@
+<style type="text/css">
+  .fa-plus {
+    padding-right: 10px;
+  }
+
+  .user {
+    cursor: default;
+  }
+</style>
+
+<div>
+  <span class="user">{{ user.username }}</span>
+
+  <i *ngIf="mouseover"
+     class="fa fa-trash"
+     aria-hidden="true"
+     title="remove user from role"
+     placement="right"
+     [popover]="removePopTemplate"
+     (click)="onRemoveClick()"
+     #removePop="bs-popover">
+  </i>
+</div>
+
+<template #removePopTemplate>
+  <div (clickOutside)="onRemoveClickOutside()">
+    <div class="form-group">
+      Please confirm the <strong>removal</strong> of:
+      <br>
+      <strong>"{{user.username}}"</strong>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-sm btn-default"
+              (click)="remove()">Confirm</button>
+      <button class="btn btn-sm btn-danger pull-right"
+              (click)="cancelRemove(cancel)">Cancel</button>
+    </div>
+  </div>
+</template>

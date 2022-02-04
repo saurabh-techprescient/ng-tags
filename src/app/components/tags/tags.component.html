@@ -1,0 +1,80 @@
+<style type="text/css">
+  #doc-search {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    float: left;
+    width: 100%;
+  }
+  #tags {
+    max-height: 80vh;
+    float: left;
+    width: 100%;
+  }
+  .ng2-smart-action-multiple-select input {
+    width: 12px !important;
+  }
+  .users-list th {
+    font-weight: 700;
+    padding: 6px !important;
+  }
+  .ng2-smart-actions .form-control {
+    height: 20px !important;
+  }
+  .users-list td {
+    font-size: 1.12em !important;
+    margin: 0;
+    padding: .5em 1em;
+  }
+  .add-user-to-role {
+    float: left;
+    padding: 9px;
+    margin-top: -10px;
+    border-radius: 4px;
+  }
+  #tags ng2-smart-table-pager {
+    float: right;
+  }
+  .hide-action td {
+    color: #aaa !important;
+  }
+  .hide-action td:first-child {
+    pointer-events: none !important;
+    /* display: none; */
+  }
+  .hide-action td input {
+    opacity: 0.5;
+    pointer-events: none !important;
+  }
+  .hide-action td.ng2-smart-actions a {
+    pointer-events: none !important;
+    background-color: #db7477 !important;
+  }
+  .ng2-smart-sort-link
+  {
+    color: #000000!important;
+  }
+  .ng2-smart-pagination .page-link-prev,
+  .ng2-smart-pagination .page-link-next
+  {
+    font-size: 14px!important;
+  }
+</style>
+<h5 class="text-center">Documents</h5>
+<p>Select documents from the table below and click on "Add Selected To Tag" to assign to the selected tag.</p>
+<div *ngIf="filteredDocs.length > 0" id="tags" [ngBusy]="{busy: busy, delay: 100}">
+  <ng2-smart-table id="users-table" [settings]="settings" allowFiltering='true' allowPaging='true'
+    [source]="filteredDocs" (deleteConfirm)="onDeleteConfirm($event)" (custom)="checkValue($event)"
+    (edit)="onEdit($event)" (userRowSelect)="onUserRowSelect($event)">
+  </ng2-smart-table>
+</div>
+
+<table *ngIf="filteredDocs.length < 1">
+  <tr>
+    <th>Name</th>
+  </tr>
+  <tr>
+    <td colspan="3">No Data Found</td>
+  </tr>
+</table>
+
+<button *ngIf="filteredDocs.length > 0" class="btn btn-sm btn-primary btn-custom add-user-to-role" (click)="addToTag()">Add Selected To Tag</button>

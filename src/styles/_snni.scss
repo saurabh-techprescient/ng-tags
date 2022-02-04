@@ -1,0 +1,132 @@
+.ssni-page-tabs {
+  padding: 0;
+  > li {
+    display: table-cell;
+    background-color: $light_bluish-grey;
+    height: 70px;
+    width: 1%;
+    vertical-align: middle;
+    float: none;
+    border-left: 1px solid $bluish-grey;
+    border-top: 1px solid $bluish-grey;
+    border-bottom: 1px solid $bluish-grey;
+
+    &:last-child {
+      border-right: 1px solid $bluish-grey;
+    }
+
+    &.active {
+      background-color: $white;
+      border-bottom: none;
+
+      a {
+        border-top: 4px solid $color_atlantis_approx;
+        color: $color_atlantis_approx;
+        padding-top: 20px;
+      }
+    }
+
+    &:disabled {
+      background-color: $white;
+      border-bottom: 1px solid rgba($bluish-grey, 0.5);
+
+      a {
+        border-top: 4px solid $color_atlantis_approx;
+        color: $color_atlantis_approx;
+        padding-top: 20px;
+      }
+    }
+
+    a {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: $bluish-grey;
+      text-align: center;
+      text-decoration: none;
+      height: 100%;
+      padding-top: 24px;
+    }
+  }
+}
+
+.ssni-page-tab-container {
+  padding: 20px 90px;
+
+  .panel {
+    margin: 40px 0;
+    border-color: $bluish-grey !important;
+  }
+
+  .panel-heading {
+    font-size: 14px;
+    font-weight: 600;
+    color: $color_mako_approx !important;
+    margin: 0;
+    background-color: $light_bluish-grey !important;
+    border-color: $bluish-grey !important;
+  }
+}
+
+.ssni-topic-tabs {
+  padding: 20px 0;
+  margin: 0;
+  max-width: 800px;
+  > li {
+    display: table-cell;
+    width: 1%;
+    float: none;
+    border-bottom: 1px solid $bluish-grey;
+
+    &.active {
+      a {
+        border-bottom: 4px solid $color_atlantis_approx;
+        color: $color_atlantis_approx !important;
+      }
+    }
+
+    a {
+      color:#cc8e8e !important;
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: $bluish-grey;
+      text-align: center;
+      text-decoration: none;
+      height: 100%;
+      cursor: pointer;
+    }
+  }
+}
+
+
+.ssni-alert {
+
+  .alert-info {
+    color: #0294a8;
+    font-weight: 600;
+    background-color: $color_mystic_approx;
+    border: solid 1px #0294a8;
+  }
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #cc8e8e;
+  border-color: #fff !important;
+}
+
+.btn-primary.active{
+  color: #fff;
+  background-color: #CB2C30 !important;
+  border-color: #fff !important;
+}
+
+.btn-custom{
+  background-color: #CB2C30 !important;
+}
+
+.btn-custom:disabled {
+  background-color: #cc8e8e !important;
+}
+

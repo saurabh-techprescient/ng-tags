@@ -1,0 +1,54 @@
+<style type="text/css">
+  h5 {
+    margin: 15px;
+  }
+  .file-options {
+    padding-left: 24px;
+  }
+  .file-options li {
+    list-style: initial;
+    padding: 5px;
+    font-size: 11px;
+  }
+  .personaSearch
+  {
+    float: left;
+    width: 100%;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+  #persona-tags-table th {
+    font-weight: 700;
+    padding: 6px !important;
+  }
+  #persona-tags-table td:last-child {
+    font-size: 1.2em !important;
+  }
+  #selected-docs-table tr th {
+    font-size: 0.750em !important;
+  }
+  .ng2-smart-actions
+  {
+    width: 30px;
+  }
+  .ng2-smart-th:first-child {
+    width: 130px;
+  }
+  .ng2-smart-titles th:first-child input {
+    display: none !important;
+  }
+</style>
+<div [ngBusy]="{busy: busy, delay: 100}">
+  <div *ngIf="!tagedDocs">
+    <h5 class="text-center">Welcome</h5>
+    <p>To get begin select a <strong>tag</strong> from the left panel, then link <strong>documents</strong> by selecting the
+      from the right panel and clicking on <strong>Add Selected To Tag</strong>.</p>
+  </div>
+  <div *ngIf="tagedDocs">
+    <h5 class="text-center">Associated Documents</h5>
+    <p>Documents listed in the table below are associated with the selected tag. Click ‘Delete’ to unlink.</p>
+    <ng2-smart-table id="selected-docs-table" [settings]="settings" allowFiltering='true' allowPaging='true'
+      [source]="docsList" (custom)="removeDoc($event)" (userRowSelect)="onUserRowSelect($event)">
+    </ng2-smart-table>
+  </div>
+</div>

@@ -183,6 +183,7 @@ export class UsersComponent implements OnInit {
 
   addToTag() {
     this.selectedDocs = [];
+    console.log(this.selectedRows);
     for (let sl of this.selectedRows) {
       this.selectedDocs.push(sl.externalId);
       this.tagDocs.push(sl.externalId);

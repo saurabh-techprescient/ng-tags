@@ -119,14 +119,6 @@ export class PersonaTagsComponent implements OnInit {
     });
   }
 
-  public getAllDocs(): any {
-    interval(5000);
-    this.busy = this.tagsService.getDocs()
-      .subscribe((res) => {
-        return this.docsList = res;
-      });
-  }
-
   public addDocs(res) {
     let data = {
       externalIds: this.selectedDocs,
@@ -154,8 +146,8 @@ export class PersonaTagsComponent implements OnInit {
         }
       });
     let emptyUsers = [];
-    
     this.globalService.setSelectedDocs(emptyUsers);
+    this.getTagDocs();
   }
 
   public removeDoc(event: any) {

@@ -95,6 +95,7 @@ export class UsersComponent implements OnInit {
       if (this.checkRow(extId)) {
         return '';
       } else {
+        console.log("Here");
         return 'hide-action';
       }
     },

@@ -98,22 +98,10 @@ export class PersonaTagsComponent implements OnInit {
   }
 
   public ngOnInit() {
-    // if (this.tagedDocs) {
-    //   this.selectedDocs = [];
-    //   this.globalService.selectedDocs.subscribe(res => {
-    //     console.log("res", res);
-    //     if (res.length > 0) {
-    //       this.addDocs();
-    //     }
-    //   });
-    // }
-
-    console.log("1");
-    console.log("a");
     this.selectedDocs = [];
     this.globalService.selectedDocs.subscribe(res => {
       if (res.length > 0) {
-        console.log("res- ",res);
+        console.log("res- ", res);
         this.addDocs(res);
       }
     });
@@ -145,9 +133,9 @@ export class PersonaTagsComponent implements OnInit {
           this.tagedDocs = res;
         }
       });
+    this.getTagDocs();
     let emptyUsers = [];
     this.globalService.setSelectedDocs(emptyUsers);
-    this.getTagDocs();
   }
 
   public removeDoc(event: any) {

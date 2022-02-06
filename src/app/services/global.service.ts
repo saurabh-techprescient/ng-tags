@@ -34,11 +34,9 @@ export class GlobalService {
     this.tagId.next(value);
   }
   public getSelectedDocs() {
-    console.log("2", this.selectedDocs);
     return this.selectedDocs;
   }
   public setSelectedDocs(value) {
-    console.log("setSelectedDocs- ", value);
     this.selectedDocs.next(value);
   }
   public getTagDocs() {

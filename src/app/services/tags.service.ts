@@ -13,7 +13,7 @@ export class TagsService {
 
   public usernameExtension: string;
   public docs: any[] = null;
-  
+
   constructor(
     public baseAPI: string,
     public tagsAPI: string,
@@ -41,24 +41,15 @@ export class TagsService {
   }
 
   public getDocs(refresh: boolean = false): any {
-    if (!this.docs || refresh) {
-      console.log("1");
-      return this.jwtHttp
-        .get(this.tagsAPI + '/partnerportalnode')
-        .map((res) => res.json())
-        .map((res) => {
-          if (res && !res.errorcode) {
-            this.docs = res;
-          }
-          return res;
-        });
-    } else {
-      console.log("2");
-      return Observable.create((observer) => {
-        observer.next(this.docs);
-        observer.complete();
+    return this.jwtHttp
+      .get(this.tagsAPI + '/partnerportalnode')
+      .map((res) => res.json())
+      .map((res) => {
+        if (res && !res.errorcode) {
+          this.docs = res;
+        }
+        return res;
       });
-    }
   }
 
   public getTagDocs(tagId): any {

@@ -120,6 +120,7 @@ export class PersonaTagsComponent implements OnInit {
   }
 
   public addDocs(res) {
+    console.log("res1", res);
     let data = {
       externalIds: this.selectedDocs,
       tags: [
@@ -132,10 +133,10 @@ export class PersonaTagsComponent implements OnInit {
       .addDocsToTag(data)
       .subscribe(res => {
         if (!res.errorCode) {
-          console.log("zzz");
           let docs: Array<any> = [];
           this.docIds = {};
           for (let doc of res) {
+            console.log("doc", doc);
             if (!this.docIds.hasOwnProperty(doc.externalId)) {
               docs.push(doc);
               this.docIds[doc.externalId] = true;

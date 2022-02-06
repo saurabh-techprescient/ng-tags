@@ -120,9 +120,8 @@ export class PersonaTagsComponent implements OnInit {
   }
 
   public addDocs(res) {
-    console.log("res1", res);
     let data = {
-      externalIds: this.selectedDocs,
+      externalIds: res,
       tags: [
         {
           tagId: this.selectedTagId

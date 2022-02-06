@@ -153,6 +153,7 @@ export class UsersComponent implements OnInit {
   public getAllDocs(): any {
     this.busy = this.tagsService.getDocs()
       .subscribe((res) => {
+        console.log("res", res)
         this.filteredDocs = res;
       });
   }
@@ -190,6 +191,6 @@ export class UsersComponent implements OnInit {
       this.tagDocs.push(sl.externalId);
     }
     this.globalService.setSelectedDocs(this.selectedDocs);
-    //this.getAllDocs();
+    this.getAllDocs();
   }
 }

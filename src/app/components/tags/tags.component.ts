@@ -185,6 +185,7 @@ export class UsersComponent implements OnInit {
     this.selectedDocs = [];
     console.log(this.selectedRows);
     for (let sl of this.selectedRows) {
+      console.log(sl);
       this.selectedDocs.push(sl.externalId);
       this.tagDocs.push(sl.externalId);
     }

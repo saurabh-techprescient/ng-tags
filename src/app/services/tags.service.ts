@@ -42,6 +42,7 @@ export class TagsService {
 
   public getDocs(refresh: boolean = false): any {
     if (!this.docs || refresh) {
+      console.log("1");
       return this.jwtHttp
         .get(this.tagsAPI + '/partnerportalnode')
         .map((res) => res.json())
@@ -52,6 +53,7 @@ export class TagsService {
           return res;
         });
     } else {
+      console.log("2");
       return Observable.create((observer) => {
         observer.next(this.docs);
         observer.complete();

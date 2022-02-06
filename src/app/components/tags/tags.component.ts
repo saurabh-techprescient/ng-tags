@@ -95,7 +95,6 @@ export class UsersComponent implements OnInit {
       if (this.checkRow(extId)) {
         return '';
       } else {
-        console.log("Here");
         return 'hide-action';
       }
     },
@@ -142,7 +141,6 @@ export class UsersComponent implements OnInit {
     if (this.tagedDocs) {
       this.tagedDocs.forEach(function (a) {
         if (a.externalId === extId) {
-          console.log("Here", a.externalId, extId);
           return false;
         }
       });

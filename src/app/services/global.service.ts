@@ -38,7 +38,7 @@ export class GlobalService {
     return this.selectedDocs;
   }
   public setSelectedDocs(value) {
-    console.log("1", value);
+    console.log("setSelectedDocs- ", value);
     this.selectedDocs.next(value);
   }
   public getTagDocs() {

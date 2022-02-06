@@ -141,6 +141,7 @@ export class UsersComponent implements OnInit {
     if (this.tagedDocs) {
       this.tagedDocs.forEach(function (a) {
         if (a.externalId === extId) {
+          console.log("Here", a.externalId, extId);
           return false;
         }
       });

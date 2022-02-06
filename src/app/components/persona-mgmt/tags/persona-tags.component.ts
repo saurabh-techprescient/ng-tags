@@ -101,7 +101,6 @@ export class PersonaTagsComponent implements OnInit {
     this.selectedDocs = [];
     this.globalService.selectedDocs.subscribe(res => {
       if (res.length > 0) {
-        console.log("res- ", res);
         this.addDocs(res);
       }
     });

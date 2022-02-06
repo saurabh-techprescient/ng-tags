@@ -182,23 +182,6 @@ export class UsersComponent implements OnInit {
   }
 
   addToTag() {
-    // this.selectedDocs = [];
-    // for (let sl of this.selectedRows) {
-    //   this.selectedDocs.push(sl.externalId);
-    //   this.tagDocs.push(sl.externalId);
-    // }
-    // let data = {
-    //   externalIds: this.selectedDocs,
-    //   tags: [
-    //     {
-    //       tagId: this.selectedTagId
-    //     }
-    //   ]
-    // }
-    // this.busy = this.tagsService.addDocsToTag(data)
-    //   .subscribe((res) => {
-    //     this.getAllDocs();
-    //   });
     this.selectedDocs = [];
     for (let sl of this.selectedRows) {
       this.selectedDocs.push(sl.externalId);
@@ -206,7 +189,5 @@ export class UsersComponent implements OnInit {
     }
     this.globalService.setSelectedDocs(this.selectedDocs);
     this.getAllDocs();
-    console.log("Add called");
-    //this.getGlobalUsers();
   }
 }

@@ -98,18 +98,25 @@ export class PersonaTagsComponent implements OnInit {
   }
 
   public ngOnInit() {
-    console.log("Init 1");
-    if (this.tagedDocs) {
-      console.log("Init 2");
-      this.selectedDocs = [];
-      this.globalService.selectedDocs.subscribe(res => {
-        console.log("res", res);
-        if (res.length > 0) {
-          console.log("Init 3");
-          this.addDocs();
-        }
-      });
-    }
+    // if (this.tagedDocs) {
+    //   this.selectedDocs = [];
+    //   this.globalService.selectedDocs.subscribe(res => {
+    //     console.log("res", res);
+    //     if (res.length > 0) {
+    //       this.addDocs();
+    //     }
+    //   });
+    // }
+
+    console.log("1");
+    console.log("a");
+    this.selectedDocs = [];
+    this.globalService.selectedDocs.subscribe(res => {
+      if (res.length > 0) {
+        console.log("res- ",res);
+        this.addDocs(res);
+      }
+    });
   }
 
   public getAllDocs(): any {
@@ -120,7 +127,7 @@ export class PersonaTagsComponent implements OnInit {
       });
   }
 
-  public addDocs() {
+  public addDocs(res) {
     let data = {
       externalIds: this.selectedDocs,
       tags: [
@@ -133,6 +140,7 @@ export class PersonaTagsComponent implements OnInit {
       .addDocsToTag(data)
       .subscribe(res => {
         if (!res.errorCode) {
+          console.log("zzz");
           let docs: Array<any> = [];
           this.docIds = {};
           for (let doc of res) {
@@ -146,7 +154,7 @@ export class PersonaTagsComponent implements OnInit {
         }
       });
     let emptyUsers = [];
-    console.log("1");
+    
     this.globalService.setSelectedDocs(emptyUsers);
   }
 

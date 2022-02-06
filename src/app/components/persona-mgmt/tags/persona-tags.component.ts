@@ -98,11 +98,14 @@ export class PersonaTagsComponent implements OnInit {
   }
 
   public ngOnInit() {
+    console.log("Init 1");
     if (this.tagedDocs) {
+      console.log("Init 2");
       this.selectedDocs = [];
       this.globalService.selectedDocs.subscribe(res => {
         console.log("res", res);
         if (res.length > 0) {
+          console.log("Init 3");
           this.addDocs();
         }
       });
@@ -143,6 +146,7 @@ export class PersonaTagsComponent implements OnInit {
         }
       });
     let emptyUsers = [];
+    console.log("1");
     this.globalService.setSelectedDocs(emptyUsers);
   }
 

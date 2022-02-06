@@ -120,20 +120,10 @@ export class PersonaTagsComponent implements OnInit {
       .addDocsToTag(data)
       .subscribe(res => {
         if (!res.errorCode) {
-          let docs: Array<any> = [];
-          this.docIds = {};
-          for (let doc of res) {
-            console.log("doc", doc);
-            if (!this.docIds.hasOwnProperty(doc.externalId)) {
-              docs.push(doc);
-              this.docIds[doc.externalId] = true;
-            }
-          }
-          res = docs;
+          this.getTagDocs();
           this.tagedDocs = res;
         }
       });
-    this.getTagDocs();
     let emptyUsers = [];
     this.globalService.setSelectedDocs(emptyUsers);
   }

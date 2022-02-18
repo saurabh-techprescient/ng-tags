@@ -34,14 +34,12 @@ import './rxjs-extensions';
 import { TreeModule } from 'angular-tree-component';
 import { MaterialModule } from '@angular/material';
 import { Ng2AutoCompleteModule } from 'ng2-auto-complete';
-
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-
 import { DndModule } from 'ng2-dnd';
 import { Ng2TableModule } from 'ng2-table';
 import { FileUploadModule } from 'ng2-file-upload';
@@ -63,14 +61,11 @@ import { PersonaTagsComponent } from './components/persona-mgmt/tags/persona-tag
 
 // directives
 import { ClickOutsideDirective } from './directives/clickOutside.directive';
-
-
 import '../styles/styles.scss';
 
 // pipes
 import { ContentTypePipe } from './pipes/content-type.pipe';
 import { GroupTypePipe } from './pipes/group-type.pipe';
-
 import '../styles/styles.scss';
 
 // Application wide providers
@@ -152,7 +147,6 @@ type StoreType = {
   ]
 })
 export class AppModule {
-
   constructor(
     public appRef: ApplicationRef,
     public appState: AppState
@@ -203,7 +197,6 @@ export function getJwtHttp(http: Http, options: RequestOptions) {
     refreshTokenGetter: (() => window['drupalSettings'].OktaRefreshToken),
     tokenSetter: ((res: Response): boolean | Promise<void> => {
       res = res.json();
-
       window['drupalSettings'].OktaAccessToken = res['access_token'];
       window['drupalSettings'].OktaRefreshToken = res['refresh_token'];
 
@@ -211,16 +204,13 @@ export function getJwtHttp(http: Http, options: RequestOptions) {
         'OktaAccessToken':      res['access_token'],
         'OktaRefreshToken':     res['refresh_token']
       });
-
       let csrfToken: any;
-
       return http
         .get(window.location.origin + '/services/session/token')
         .map((res) => {
           if (res) {
             csrfToken = res['_body'];
           }
-
           return res;
         })
         .flatMap(res => {
@@ -245,7 +235,6 @@ export function getJwtHttp(http: Http, options: RequestOptions) {
     globalHeaders: [{'Accept': 'application/json'}],
     tokenGetter: (() => window['drupalSettings'].OktaAccessToken),
   });
-
   return new JwtHttp(
     new JwtConfigService(jwtOptions, authConfig),
     http,

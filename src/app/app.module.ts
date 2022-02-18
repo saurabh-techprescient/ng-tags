@@ -195,17 +195,17 @@ export class AppModule {
 
 export function getJwtHttp(http: Http, options: RequestOptions) {
   let jwtOptions = {
-    endPoint: window['Drupal'].settings.ng_persona.refreshAPI,
+    endPoint: window['drupalSettings'].ng_persona.refreshAPI,
     // optional
-    payload: { refreshToken: window['Drupal'].settings.OktaRefreshToken },
+    payload: { refreshToken: window['drupalSettings'].OktaRefreshToken },
     beforeSeconds: 600, // refresh tokens before 10 min
     tokenName: 'refresh_token',
-    refreshTokenGetter: (() => window['Drupal'].settings.OktaRefreshToken),
+    refreshTokenGetter: (() => window['drupalSettings'].OktaRefreshToken),
     tokenSetter: ((res: Response): boolean | Promise<void> => {
       res = res.json();
 
-      window['Drupal'].settings.OktaAccessToken = res['access_token'];
-      window['Drupal'].settings.OktaRefreshToken = res['refresh_token'];
+      window['drupalSettings'].OktaAccessToken = res['access_token'];
+      window['drupalSettings'].OktaRefreshToken = res['refresh_token'];
 
       let tokenPayload = JSON.stringify({
         'OktaAccessToken':      res['access_token'],
@@ -243,7 +243,7 @@ export function getJwtHttp(http: Http, options: RequestOptions) {
   let authConfig = new AuthConfig({
     noJwtError: true,
     globalHeaders: [{'Accept': 'application/json'}],
-    tokenGetter: (() => window['Drupal'].settings.OktaAccessToken),
+    tokenGetter: (() => window['drupalSettings'].OktaAccessToken),
   });
 
   return new JwtHttp(
@@ -255,8 +255,8 @@ export function getJwtHttp(http: Http, options: RequestOptions) {
 
 export function configTagsService(http: Http, jwtHttp: JwtHttp) {
   return new TagsService(
-    window['Drupal'].settings.ng_persona.baseAPI,
-    window['Drupal'].settings.ng_persona.tagsAPI,
+    window['drupalSettings'].ng_persona.baseAPI,
+    window['drupalSettings'].ng_persona.tagsAPI,
     http,
     jwtHttp
   )
@@ -264,7 +264,7 @@ export function configTagsService(http: Http, jwtHttp: JwtHttp) {
 
 export function configMetadataService(http: Http, jwtHttp: JwtHttp) {
   return new MetadataService(
-    window['Drupal'].settings.ng_persona.metadataAPI,
+    window['drupalSettings'].ng_persona.metadataAPI,
     http,
     jwtHttp
   )

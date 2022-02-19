@@ -22,24 +22,16 @@ export class TagsService {
   ) { }
 
   public getTags(refresh: boolean = false): any {
-    if (!this.docs || refresh) {
-      console.log("If ", this.docs, refresh);
-      return this.jwtHttp
-        .get(this.tagsAPI + '/contentitemtag')
-        .map((res) => res.json())
-        .map((res) => {
-          if (res && !res.errorcode) {
-            this.docs = res;
-          }
-          return res;
-        });
-    } else {
-      console.log("Else");
-      return Observable.create((observer) => {
-        observer.next(this.docs);
-        observer.complete();
+    console.log("If ", this.jwtHttp);
+    return this.jwtHttp
+      .get(this.tagsAPI + '/contentitemtag')
+      .map((res) => res.json())
+      .map((res) => {
+        if (res && !res.errorcode) {
+          this.docs = res;
+        }
+        return res;
       });
-    }
   }
 
   public getDocs(refresh: boolean = false): any {

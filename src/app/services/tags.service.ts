@@ -23,6 +23,7 @@ export class TagsService {
 
   public getTags(refresh: boolean = false): any {
     if (!this.docs || refresh) {
+      console.log("If ", this.docs, refresh);
       return this.jwtHttp
         .get(this.tagsAPI + '/contentitemtag')
         .map((res) => res.json())
@@ -33,6 +34,7 @@ export class TagsService {
           return res;
         });
     } else {
+      console.log("Else");
       return Observable.create((observer) => {
         observer.next(this.docs);
         observer.complete();

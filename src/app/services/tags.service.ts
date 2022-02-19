@@ -10,10 +10,8 @@ import { JwtHttp } from 'angular2-jwt-refresh';
 @Injectable()
 
 export class TagsService {
-
   public usernameExtension: string;
   public docs: any[] = null;
-
   constructor(
     public baseAPI: string,
     public tagsAPI: string,

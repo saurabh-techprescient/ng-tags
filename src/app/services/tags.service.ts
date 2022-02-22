@@ -20,7 +20,6 @@ export class TagsService {
   ) { }
 
   public getTags(refresh: boolean = false): any {
-    console.log("If ", this.jwtHttp);
     return this.jwtHttp
       .get(this.tagsAPI + '/contentitemtag')
       .map((res) => res.json())

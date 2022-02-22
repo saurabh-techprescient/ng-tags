@@ -47,22 +47,18 @@ import { BusyModule, BusyConfig } from 'angular2-busy';
 import { TagInputModule } from 'ng2-tag-input';
 import { AuthConfig } from 'angular2-jwt';
 import { JwtConfigService, JwtHttp } from 'angular2-jwt-refresh';
-
 // services
 import { TagsService } from './services/tags.service';
 import { MetadataService } from './services/metadata.service';
 import { GlobalService } from './services/global.service';
-
 // components
 import { UsersComponent } from './components/tags/tags.component';
 import { LinkedDocumentsComponent } from './components/tags/linked-documents.component';
 import { PersonaMgmtComponent } from './components/persona-mgmt/persona-mgmt.component';
 import { PersonaTagsComponent } from './components/persona-mgmt/tags/persona-tags.component';
-
 // directives
 import { ClickOutsideDirective } from './directives/clickOutside.directive';
 import '../styles/styles.scss';
-
 // pipes
 import { ContentTypePipe } from './pipes/content-type.pipe';
 import { GroupTypePipe } from './pipes/group-type.pipe';
@@ -146,6 +142,7 @@ type StoreType = {
     APP_PROVIDERS
   ]
 })
+
 export class AppModule {
   constructor(
     public appRef: ApplicationRef,
@@ -199,7 +196,6 @@ export function getJwtHttp(http: Http, options: RequestOptions) {
       res = res.json();
       window['drupalSettings'].ng_persona.OktaAccessToken = res['access_token'];
       window['drupalSettings'].ng_persona.OktaRefreshToken = res['refresh_token'];
-
       let tokenPayload = JSON.stringify({
         'OktaAccessToken':      res['access_token'],
         'OktaRefreshToken':     res['refresh_token']
@@ -233,7 +229,7 @@ export function getJwtHttp(http: Http, options: RequestOptions) {
   let authConfig = new AuthConfig({
     noJwtError: true,
     globalHeaders: [{'Accept': 'application/json'}],
-    tokenGetter: (() => window['drupalSettings'].OktaAccessToken),
+    tokenGetter: (() => window['drupalSettings'].ng_persona.OktaAccessToken),
   });
   return new JwtHttp(
     new JwtConfigService(jwtOptions, authConfig),

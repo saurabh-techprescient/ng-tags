@@ -197,8 +197,8 @@ export function getJwtHttp(http: Http, options: RequestOptions) {
     refreshTokenGetter: (() => window['drupalSettings'].ng_persona.OktaRefreshToken),
     tokenSetter: ((res: Response): boolean | Promise<void> => {
       res = res.json();
-      window['drupalSettings'].OktaAccessToken = res['access_token'];
-      window['drupalSettings'].OktaRefreshToken = res['refresh_token'];
+      window['drupalSettings'].ng_persona.OktaAccessToken = res['access_token'];
+      window['drupalSettings'].ng_persona.OktaRefreshToken = res['refresh_token'];
 
       let tokenPayload = JSON.stringify({
         'OktaAccessToken':      res['access_token'],

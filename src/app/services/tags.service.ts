@@ -53,12 +53,31 @@ export class TagsService {
   }
 
   public addTag(tag: any): any {
+    // let headers = new Headers();
+    // headers.append('Content-Type', 'application/json');
+    // let payload = JSON.stringify({
+    //   tagName: tag,
+    // });
+    // var options = new RequestOptions({
+    //   headers: headers
+    // });
+    // return this.jwtHttp
+    //   .post(
+    //     this.tagsAPI + '/contentitemtag/',
+    //     payload,
+    //     options
+    //   )
+    //   .map((res) => res.json())
+    //   .map((res) => {
+    //     return res;
+    //   });
+
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     let payload = JSON.stringify({
-      tagName: tag,
+      tagName: tag
     });
-    var options = new RequestOptions({
+    let options = new RequestOptions({
       headers: headers
     });
     return this.jwtHttp
@@ -72,7 +91,6 @@ export class TagsService {
         return res;
       });
   }
-
 
   public updateTag(tag: any): any {
     let headers = new Headers();

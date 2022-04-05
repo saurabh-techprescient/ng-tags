@@ -140,7 +140,6 @@ export class PersonaMgmtComponent implements OnInit {
       .subscribe((res) => {
         this.getTags();
       });
-    location.reload();
   }
 
   public cancelAddTag(): void {

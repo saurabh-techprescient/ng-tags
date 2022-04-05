@@ -63,7 +63,7 @@ export class TagsService {
     });
     return this.jwtHttp
       .post(
-        this.tagsAPI + '/contentitemtag/',
+        this.baseAPI + 'contentstag/' + tag,
         payload,
         options
       )

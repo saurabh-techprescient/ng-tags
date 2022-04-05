@@ -139,6 +139,7 @@ export class PersonaMgmtComponent implements OnInit {
     this.busy = this.tagsService.addTag(this.newTagName)
       .subscribe((res) => {
         this.getTags();
+        location.reload();
       });
   }
 

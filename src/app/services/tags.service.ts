@@ -1,164 +1,71 @@
-/**
- * Created by adriangillette on 12/19/16.
- */
-
-import { Injectable } from "@angular/core";
-import { Http, Headers, RequestOptions } from "@angular/http";
-import { Observable } from "rxjs/Observable";
-import { JwtHttp } from 'angular2-jwt-refresh';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { Tag } from '../interfaces/tag';
 
 @Injectable()
-
 export class TagsService {
-  public usernameExtension: string;
-  public docs: any[] = null;
-  constructor(
-    public baseAPI: string,
-    public tagsAPI: string,
-    public http: Http,
-    public jwtHttp: JwtHttp
-  ) { }
+  readonly windowData = (window as { [key: string]: any })[
+    environment.settingsProperty
+  ];
+  readonly baseAPI = this.windowData
+    ? this.windowData.ng_persona.baseAPI
+    : 'http://localhost/itron';
 
-  public getTags(refresh: boolean = false): any {
-    return this.jwtHttp
-      .get(this.tagsAPI + '/contentitemtag')
-      .map((res) => res.json())
-      .map((res) => {
-        if (res && !res.errorcode) {
-          this.docs = res;
-        }
-        return res;
-      });
+  readonly tagsAPI = this.windowData
+    ? this.windowData.ng_persona.tagsAPI
+    : 'http://localhost/itron';
+
+  public docs: any[] = [];
+  constructor(public http: HttpClient) {}
+
+  getTags = (): Observable<Array<Tag>> =>
+    this.http.get<Array<Tag>>(`${this.tagsAPI}/contentitemtag`);
+
+  public getDocs(): any {
+    return this.http.get<any>(`${this.tagsAPI}/partnerportalnode`);
   }
 
-  public getDocs(refresh: boolean = false): any {
-    return this.jwtHttp
-      .get(this.tagsAPI + '/partnerportalnode')
-      .map((res) => res.json())
-      .map((res) => {
-        if (res && !res.errorcode) {
-          this.docs = res;
-        }
-        return res;
-      });
+  public getTagDocs(tagId: string): any {
+    return this.http.get<any>(`${this.tagsAPI}/contentitemtag${tagId}`);
   }
 
-  public getTagDocs(tagId): any {
-    return this.jwtHttp
-      .get(this.tagsAPI + '/contentitemtag/' + tagId)
-      .map((res) => res.json())
-      .map((res) => {
-        return res;
-      });
-  }
-
-  public addTag(tag: any): any {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    let payload = JSON.stringify({
+  addTag(tag: any): Observable<Tag> {
+    const payload = JSON.stringify({
       tagName: tag
     });
-    let options = new RequestOptions({
-      headers: headers
-    });
-    return this.jwtHttp
-      .post(
-        this.baseAPI + 'contentstag/' + tag,
-        payload,
-        options
-      )
-      .map((res) => res.json())
-      .map((res) => {
-        return res;
-      });
+    return this.http.post<Tag>(`${this.baseAPI}contentstag/${tag}`, payload);
   }
 
-  public updateTag(tag: any): any {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    let payload = JSON.stringify({
+  updateTag(tag: any): Observable<any> {
+    const payload = JSON.stringify({
       tagIndex: tag.tagIndex,
       tagName: tag.tagName,
       tagId: tag.tagId
     });
-
-    var options = new RequestOptions({
-      headers: headers
-    });
-
-    return this.jwtHttp
-      .put(
-        this.tagsAPI + '/contentitemtag/',
-        payload,
-        options
-      )
-      .map((res) => res.json())
-      .map((res) => {
-        return res;
-      });
+    return this.http.put<any>(`${this.tagsAPI}/contentitemtag/`, payload);
   }
 
-  public deleteTag(tagId): any {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    var options = new RequestOptions({
-      headers: headers
-    });
-    return this.jwtHttp
-      .delete(
-        this.tagsAPI + '/contentitemtag/' + tagId,
-        options
-      )
-      .map((res) => res.json())
-      .map((res) => {
-        return res;
-      });
+  deleteTag(tagId: string): Observable<any> {
+    return this.http.delete<any>(`${this.tagsAPI}/contentitemtag/${tagId}`);
   }
 
-  removeDocFromTag(data: any): any {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    let payload = data;
-    var options = new RequestOptions({
-      headers: headers
-    });
-    return this.jwtHttp
-      .put(
-        this.tagsAPI + '/contentitemtag/updatecontentitemtag',
-        payload,
-        options
-      )
-      .map((res) => res.json())
-      .map((res) => {
-        return res;
-      });
+  removeDocFromTag(data: any): Observable<any> {
+    return this.http.put<any>(
+      `${this.tagsAPI}/contentitemtag/updatecontentitemtag`,
+      data
+    );
   }
 
-  addDocsToTag(data: any): any {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    let payload = data;
-    var options = new RequestOptions({
-      headers: headers
-    });
-    return this.jwtHttp
-      .put(
-        this.tagsAPI + '/contentitemtag/updatecontentstag/',
-        payload,
-        options
-      )
-      .map((res) => res.json())
-      .map((res) => {
-        return res;
-      });
+  addDocsToTag(data: any): Observable<any> {
+    return this.http.put<any>(
+      `${this.tagsAPI}/contentitemtag/updatecontentitemtag`,
+      data
+    );
   }
 
   public getUser(userId: string): any {
-    return this.jwtHttp
-      .get(this.tagsAPI + '/' + userId)
-      .map((res) => res.json())
-      .map((res) => {
-        return res;
-      });
+    return this.http.get<any>(`${this.tagsAPI}/${userId}`);
   }
 }

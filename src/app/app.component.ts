@@ -1,45 +1,61 @@
-/*
- * Angular 2 decorators and services
- */
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation,
-  ViewChild
-} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { GlobalService } from './services/global.service';
-import { TagsService } from './services/tags.service';
+import {
+  getAppApiRequests,
+  getLoadingText
+} from './redux/selectors/app.selectors';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { messages } from './shared/messages';
+import { loadFiles } from './redux/actions/file.actions';
+import { loadTags } from './redux/actions/tags.actions';
 
-/*
- * App Component
- * Top Level Component
- */
 @Component({
-  selector: 'app',
-  encapsulation: ViewEncapsulation.None,
-  templateUrl: 'app.component.html'
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-
-  @ViewChild('companySelector') companySelector: any;
-
-  public busy: Subscription;
-  public selected: string = 'role';
-  public user: any;
-  public userRole: string;
-  public optionLabel: string;
-  public isGlobal: boolean = true;
-  public companies: any[] = [];
-  public companyName: string = '';
-
+export class AppComponent implements OnInit, OnDestroy {
+  readonly messages = messages;
+  apiLoadingSubscription = new Subscription();
+  loadingTextSubscription = new Subscription();
+  loadingText = this.messages.loading.loadingText;
   constructor(
-    private globalService: GlobalService,
-    private tagsService: TagsService
-  ) {
+    private readonly store: Store,
+    private readonly spinner: NgxSpinnerService
+  ) {}
+
+  ngOnInit() {
+    this.store.dispatch(loadFiles());
+    this.store.dispatch(loadTags());
+    this.apiLoadingSubscription = this.store
+      .select(getAppApiRequests)
+      .subscribe({
+        next: (value: { tags: boolean; fileList: boolean }) => {
+          if (value.fileList || value.tags) {
+            if (value.fileList) {
+              this.loadingText = this.messages.loading.fileList;
+            }
+            if (value.tags) {
+              this.loadingText = this.messages.loading.tags;
+            }
+            this.spinner.show().then();
+          } else if (!value.fileList && !value.tags) {
+            this.spinner.hide().then();
+          }
+          if (value.fileList && value.tags) {
+            this.loadingText = this.messages.loading.loadingText;
+            this.spinner.show().then();
+          }
+        }
+      });
+    this.loadingTextSubscription = this.store.select(getLoadingText).subscribe({
+      next: (value) => (this.loadingText = value)
+    });
   }
 
-  public ngOnInit() {
-    this.userRole = 'globalAdmin';
+  ngOnDestroy() {
+    this.apiLoadingSubscription.unsubscribe();
+    this.loadingTextSubscription.unsubscribe();
   }
 }

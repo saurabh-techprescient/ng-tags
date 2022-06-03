@@ -1,0 +1,8 @@
+#!/bin/bash
+# shellcheck disable=SC1090 disable=SC2046
+if command -v nave &>/dev/null; then
+    nave auto
+elif command -v nvm &>/dev/null; then
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+fi

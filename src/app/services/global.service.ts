@@ -1,50 +1,34 @@
-/**
- * Created by adriangillette on 12/19/16.
- */
-
-import {Injectable, Inject} from "@angular/core";
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Subject, Observable } from 'rxjs';
 
 @Injectable()
-
 export class GlobalService {
-
-  // Observable string sources
-  private globalOrCompanyselectedSource: Subject<string> = new Subject<any>();
   public selectedDocs: Subject<string> = new Subject<any>();
   public tagId: Subject<string> = new Subject<any>();
   public tagDocs: Subject<any> = new Subject<any>();
-  private userRoleLoggedIn:Subject<string> = new Subject<string>();
-
-  // Observable string streams
-  public globalOrCompanyselected: Observable<string> = this.globalOrCompanyselectedSource.asObservable();
-  public selectedCompany: string = null;
-  public userGlobal:string = null;
-
-  constructor() {
-
-  }
-
+  public globalOrCompanyselectedSource: Subject<string> = new Subject<any>();
+  public globalOrCompanyselected: Observable<string> =
+    this.globalOrCompanyselectedSource.asObservable();
+  public selectedCompany = '';
+  public userGlobal = '';
+  private userRoleLoggedIn: Subject<string> = new Subject<string>();
+  constructor() {}
   public getTagId() {
     return this.tagId;
   }
-  public setTagId(value)
-  {
+  public setTagId(value: string) {
     this.tagId.next(value);
   }
   public getSelectedDocs() {
     return this.selectedDocs;
   }
-  public setSelectedDocs(value) {
+  public setSelectedDocs(value: string) {
     this.selectedDocs.next(value);
   }
   public getTagDocs() {
     return this.tagDocs;
   }
-  public setTagDocs(value)
-  {
+  public setTagDocs(value: string) {
     this.tagDocs.next(value);
   }
 }
-

@@ -58,7 +58,6 @@ export class FileListComponent implements OnInit, OnDestroy {
     ];
     this.filesSubscription = this.store.select(getAllFiles).subscribe({
       next: (value: Array<File> | null) => {
-        console.log('Value- ', value);
         if (value) {
           this.files = [];
           this.files = value;

@@ -3,10 +3,10 @@
     <h3>{{ messages.tagsTable.title }}</h3>
   </div>
   <div class="flex-column flex align-items-stretch justify-content-start m-2 p-2 border-solid border-1">
-    <p-table #dt [(selection)]="selectedTag" [globalFilterFields]="['fileName']" [paginator]="true" [rowHover]="true"
+    <p-table #dt [(selection)]="selectedTag" [globalFilterFields]="['tagName']" [paginator]="true" [rowHover]="true"
       [rows]="10" [showCurrentPageReport]="true" [value]="tags" styleClass="p-datatable-striped"
-      responsiveLayout="scroll" dataKey="fileId" [scrollHeight]="constants.tableScrollHeight"
-      (onNodeSelect)="tagSelect($event)">
+      responsiveLayout="scroll" dataKey="tagId" [scrollHeight]="constants.tableScrollHeight"
+      (onNodeSelect)="tagSelect($event)" sortMode="multiple">
       <ng-template pTemplate="caption">
         <div class="float-left flex align-items-center justify-content-between flex-wrap mr-5">
           <span class="p-input-icon-left w-auto">
@@ -16,13 +16,24 @@
             " pInputText type="text" class="w-full" />
           </span>
         </div>
-        <button pButton class="p-button-info" type="button" [label]="messages.tagsTable.addTag" 
+        <button pButton class="p-button-info" type="button" [label]="messages.tagsTable.addTag"
           (click)="addTag()"></button>
       </ng-template>
       <ng-template pTemplate="header">
         <tr>
           <th id="file-name">{{ messages.filesTable.columns.name }}</th>
           <th id="file-name">{{ messages.buttons.action }}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-tag>
+        <tr>
+          <td>{{ tag.tagName }}</td>
+          <td>
+            <span (click)="editTag(tag.tagId, tag.tagName)"
+              class="p-button-icon p-button-icon-left pi pi-pencil mr-3 actions" aria-hidden="true"></span>
+            <span (click)="deleteTag(tag.tagId, tag.tagName)"
+              class="p-button-icon p-button-icon-left pi pi-trash actions" aria-hidden="true"></span>
+          </td>
         </tr>
       </ng-template>
       <ng-template pTemplate="emptymessage">
@@ -35,40 +46,74 @@
     </p-table>
   </div>
 </div>
-<p-dialog [header]="
-    !selectedTag
-      ? messages.tagsTable.addTag
-      : messages.tagsTable.editTag
-  " [(visible)]="newTag" [modal]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false"
-  [style]="{ maxWidth: '400px', width: '100%' }">
+
+<p-dialog [header]="messages.tagsTable.addTag" [(visible)]="showNewTagPopup" [modal]="true" [baseZIndex]="10000"
+  [draggable]="false" [resizable]="false" [style]="{ maxWidth: '400px', width: '100%' }">
   <form [formGroup]="tagForm">
     <label for="metadata-name">{{ messages.tagsTable.form.name }}</label>
     <input class="w-full" id="metadata-name" pInputText type="text" [class.ng-invalid]="
-        getName.value?.length < constants.tagNameMinLength ||
-        (getName.touched && !getName.value?.length)
-      " formControlName="name" />
+        getTagName.value?.length < constants.tagNameMinLength ||
+        (getTagName.touched && !getTagName.value?.length)
+      " formControlName="tagName" />
     <div [class.justify-content-between]="
-        (getName.dirty && getName.touched && !getName.value?.length) ||
-        getName.value?.length < constants.tagNameMinLength
+        (getTagName.dirty && getTagName.touched && !getTagName.value?.length) ||
+        getTagName.value?.length < constants.tagNameMinLength
       " class="flex flex-row justify-content-end align-items-center mt-2">
-      <small *ngIf="getName.dirty && getName.touched && !getName.value?.length" class="block p-error w-auto mt-0"
-        id="regex-input-validation-errors">{{ messages.tagsTable.form.formErrors.required }}</small>
-      <small *ngIf="getName.value?.length < constants.tagNameMinLength" class="block p-error w-auto mt-0">{{
+      <small *ngIf="getTagName.dirty && getTagName.touched && !getTagName.value?.length"
+        class="block p-error w-auto mt-0" id="regex-input-validation-errors">{{
+        messages.tagsTable.form.formErrors.required }}</small>
+      <small *ngIf="getTagName.value?.length < constants.tagNameMinLength" class="block p-error w-auto mt-0">{{
         messages.tagsTable.form.formErrors.metadataName.minLength }}</small>
       <small [class.p-error]="
-          getName.value?.length < constants.tagNameMinLength
-        " class="block mt-0 w-auto" id="regex-input-help">{{ getName.value?.length || 0 }} /{{
+          getTagName.value?.length < constants.tagNameMinLength
+        " class="block mt-0 w-auto" id="regex-input-help">{{ getTagName.value?.length || 0 }} /{{
         constants.tagNameMinLength
         }}</small>
     </div>
   </form>
   <ng-template pTemplate="footer">
-    <button pButton icon="pi pi-check" (click)="createTag()" [label]="messages.buttons.create" class="p-button-success"
-      [disabled]="
-        !getName.value.length ||
-        getName.value.length < constants.tagNameMinLength
+    <button pButton class="p-button-danger mr-2" type="button" [label]="messages.buttons.cancel"
+      (click)="showNewTagPopup = false"></button>
+    <button pButton (click)="createTag()" [label]="messages.buttons.create" class="p-button-success" [disabled]="
+        !getTagName.value.length ||
+        getTagName.value.length < constants.tagNameMinLength
       "></button>
-    <button pButton class="p-button-danger mr-0" type="button" [label]="messages.buttons.cancel" icon="pi pi-times"
-      (click)="newTag = false"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [header]="messages.tagsTable.editTag" [(visible)]="showEditTagPopup" [modal]="true" [baseZIndex]="10000"
+  [draggable]="false" [resizable]="false" [style]="{ maxWidth: '400px', width: '100%' }">
+  <form [formGroup]="tagForm">
+
+    <input class="w-full" id="tag-id" pInputText type="hidden" formControlName="tagId" />
+
+    <label for="tag-name">{{ messages.tagsTable.form.name }}</label>
+    <input class="w-full" id="tag-name" pInputText type="text" [class.ng-invalid]="
+        getTagName.value?.length < constants.tagNameMinLength ||
+        (getTagName.touched && !getTagName.value?.length)
+      " formControlName="tagName" />
+    <div [class.justify-content-between]="
+        (getTagName.dirty && getTagName.touched && !getTagName.value?.length) ||
+        getTagName.value?.length < constants.tagNameMinLength
+      " class="flex flex-row justify-content-end align-items-center mt-2">
+      <small *ngIf="getTagName.dirty && getTagName.touched && !getTagName.value?.length"
+        class="block p-error w-auto mt-0" id="regex-input-validation-errors">{{
+        messages.tagsTable.form.formErrors.required }}</small>
+      <small *ngIf="getTagName.value?.length < constants.tagNameMinLength" class="block p-error w-auto mt-0">{{
+        messages.tagsTable.form.formErrors.metadataName.minLength }}</small>
+      <small [class.p-error]="
+          getTagName.value?.length < constants.tagNameMinLength
+        " class="block mt-0 w-auto" id="regex-input-help">{{ getTagName.value?.length || 0 }} /{{
+        constants.tagNameMinLength
+        }}</small>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <button pButton class="p-button-danger mr-2" type="button" [label]="messages.buttons.cancel"
+      (click)="showEditTagPopup = false"></button>
+    <button pButton (click)="updateTag()" [label]="messages.buttons.update" class="p-button-success" [disabled]="
+        !getTagName.value.length ||
+        getTagName.value.length < constants.tagNameMinLength
+      "></button>
   </ng-template>
 </p-dialog>

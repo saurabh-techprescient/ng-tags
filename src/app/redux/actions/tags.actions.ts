@@ -1,13 +1,11 @@
 import { createAction, props } from '@ngrx/store';
 import { Tags } from '../../interfaces/tags';
-import { TreeNode } from 'primeng/api';
-import { Tag } from '../../interfaces/tag';
 
 export const loadTags = createAction('[Tags] Load Tags');
 
 export const loadTagsSuccess = createAction(
   '[Tags] Load Tags Success',
-  props<{ data: Array<Tags> }>()
+  props<{ tags: Array<Tags> }>()
 );
 
 export const loadTagsFailure = createAction(
@@ -17,12 +15,12 @@ export const loadTagsFailure = createAction(
 
 export const loadSelectedTag = createAction(
   '[Tags] Load Tags Selected Node',
-  props<{ data: TreeNode | null }>()
+  props<{ tags: Tags | null }>()
 );
 
 export const createTag = createAction(
   '[Tags] Create Tag',
-  props<{ data: Tag }>()
+  props<{ tags: Tags }>()
 );
 export const createTagSuccess = createAction(
   '[Tags] Create Tag Success',
@@ -36,7 +34,7 @@ export const createTagFailure = createAction(
 
 export const updateTag = createAction(
   '[Tags] Update Tag',
-  props<{ data: Tag }>()
+  props<{ tags: Tags }>()
 );
 export const updateTagSuccess = createAction(
   '[Tags] Update Tag Success',

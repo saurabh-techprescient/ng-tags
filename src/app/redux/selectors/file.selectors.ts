@@ -5,5 +5,5 @@ export const files = createFeatureSelector<FileState>(fileFeatureKey);
 
 export const getAllFiles = createSelector(
   files,
-  (state: FileState) => state.fileList
+  (state: FileState) => state.files
 );

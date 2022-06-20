@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { ConfirmationService, TreeNode } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
+import { Tags } from '../../interfaces/tags';
 import { getSelectedNode } from '../../redux/selectors/tags.selectors';
 import { fileDropped } from '../../redux/actions/app.actions';
 import { File } from '../../interfaces/file';
@@ -19,7 +20,7 @@ export class SelectedMetadataComponent implements OnInit, OnDestroy {
   @ViewChild('dt') dt: Table | undefined;
   readonly messages = messages;
   readonly constants = constants;
-  selectedNode: TreeNode | null = null;
+  selectedNode: Tags | null = null;
   selectedNodeSubscription = new Subscription();
   dropped = new Array<any>();
   files = new Array<File>();
@@ -35,7 +36,7 @@ export class SelectedMetadataComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (value) => {
           this.selectedNode = value;
-          this.updateFiles();
+          // this.updateFiles();
         }
       });
   }
@@ -57,52 +58,52 @@ export class SelectedMetadataComponent implements OnInit, OnDestroy {
     }
   }
 
-  unlinkFile(file: File): void {
-    if (this.selectedNode) {
-      this.confirmationService.confirm({
-        message: file.name,
-        header: this.messages.selectedNode.unlinkFile.header,
-        icon: 'pi pi-exclamation-triangle',
-        accept: () =>
-          this.store.dispatch(
-            unlinkFile({
-              data: {
-                metadataId: this.selectedNode?.data.nodeId,
-                files: [file.fileId]
-              }
-            })
-          )
-      });
-    }
-  }
+  // unlinkFile(file: File): void {
+  //   if (this.selectedNode) {
+  //     this.confirmationService.confirm({
+  //       message: file.name,
+  //       header: this.messages.selectedNode.unlinkFile.header,
+  //       icon: 'pi pi-exclamation-triangle',
+  //       accept: () =>
+  //         this.store.dispatch(
+  //           unlinkFile({
+  //             data: {
+  //               metadataId: this.selectedNode?.data.nodeId,
+  //               files: [file.fileId]
+  //             }
+  //           })
+  //         )
+  //     });
+  //   }
+  // }
 
-  unlinkSelectedFiles(): void {
-    if (this.selectedNode) {
-      this.confirmationService.confirm({
-        message: this.messages.selectedNode.unlinkFile.title,
-        header: this.messages.selectedNode.unlinkFile.header,
-        icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-          const files = new Array<string>();
-          this.selectedFiles.forEach((file) => files.push(file.fileId));
-          this.store.dispatch(
-            unlinkFile({
-              data: {
-                metadataId: this.selectedNode?.data.nodeId,
-                files
-              }
-            })
-          );
-          this.selectedFiles = [];
-        }
-      });
-    }
-  }
+  // unlinkSelectedFiles(): void {
+  //   if (this.selectedNode) {
+  //     this.confirmationService.confirm({
+  //       message: this.messages.selectedNode.unlinkFile.title,
+  //       header: this.messages.selectedNode.unlinkFile.header,
+  //       icon: 'pi pi-exclamation-triangle',
+  //       accept: () => {
+  //         const files = new Array<string>();
+  //         this.selectedFiles.forEach((file) => files.push(file.fileId));
+  //         this.store.dispatch(
+  //           unlinkFile({
+  //             data: {
+  //               metadataId: this.selectedNode?.data.nodeId,
+  //               files
+  //             }
+  //           })
+  //         );
+  //         this.selectedFiles = [];
+  //       }
+  //     });
+  //   }
+  // }
 
-  private updateFiles(): void {
-    this.files = [];
-    if (this.selectedNode && this.selectedNode.data) {
-      this.files = [...this.selectedNode.data.files];
-    }
-  }
+  // private updateFiles(): void {
+  //   this.files = [];
+  //   if (this.selectedNode && this.selectedNode.data) {
+  //     this.files = [...this.selectedNode.data.files];
+  //   }
+  // }
 }

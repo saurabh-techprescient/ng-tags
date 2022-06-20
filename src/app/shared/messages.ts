@@ -25,7 +25,7 @@ export const messages = {
       formErrors: {
         required: 'Required',
         metadataName: {
-          minLength: `Length should be less than ${constants.tagNameMinLength} characters`
+          minLength: `Length should be more than ${constants.tagNameMinLength} characters`
         }
       }
     },
@@ -78,6 +78,7 @@ export const messages = {
   },
   buttons: {
     create: 'Create',
+    update: 'Update',
     cancel: 'Cancel',
     action: 'Actions'
   },

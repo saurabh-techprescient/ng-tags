@@ -5,11 +5,8 @@ import { FilesService } from '../../services/files.service';
 import * as FileActions from '../actions/file.actions';
 import { catchError, map, of, switchMap } from 'rxjs';
 import { loadFilesApiSuccess } from '../actions/app.actions';
-import { SuccessResponse } from '../../interfaces/success-response';
-import { ResponseCode } from '../../enums/response-code';
 import { AppService } from '../../services/app.service';
 import { messages } from '../../shared/messages';
-import { loadTags } from '../actions/tags.actions';
 import { File } from '../../interfaces/file';
 
 @Injectable()
@@ -20,7 +17,7 @@ export class FileEffects {
       switchMap(() => {
         this.store.dispatch(loadFilesApiSuccess({ data: true }));
         return this.filesService.getDocs().pipe(
-          map((data: Array<any>) => {
+          map((data: Array<File>) => {
             this.store.dispatch(loadFilesApiSuccess({ data: false }));
             this.appService.toast(
               this.messages.success,

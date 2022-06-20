@@ -7,12 +7,12 @@ import { AppState } from './states/app.state';
 import { FileState } from './states/file.state';
 
 export interface State {
-  tag: TagsState;
+  tags: TagsState;
   files: FileState;
   app: AppState;
 }
 export const reducers: ActionReducerMap<State> = {
-  tag: TagsReducer.reducer,
+  tags: TagsReducer.reducer,
   files: FilesReducer.reducer,
   app: AppReducer.reducer
 };

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Tags } from '../../interfaces/tags';
-import { ConfirmationService, MenuItem, TreeNode } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { messages } from 'src/app/shared/messages';
 import { constants } from 'src/app/shared/constants';
 import {
@@ -13,11 +13,11 @@ import { Store } from '@ngrx/store';
 import {
   createTag,
   deleteTag,
-  loadSelectedTag
+  loadSelectedTag,
+  updateTag
 } from '../../redux/actions/tags.actions';
 import { Subscription } from 'rxjs';
 import { getAllTags } from '../../redux/selectors/tags.selectors';
-import { Tag } from 'src/app/interfaces/tag';
 import { Table } from 'primeng/table';
 
 @Component({
@@ -30,9 +30,10 @@ export class TagsComponent implements OnInit, OnDestroy {
   readonly messages = messages;
   readonly constants = constants;
   mainActionMenu = new Array<MenuItem>();
-  selectedTag: TreeNode | null = null;
-  tags = new Array<any>();
-  newTag = false;
+  selectedTag = new Array<Tags>();
+  tags = new Array<Tags>();
+  showNewTagPopup = false;
+  showEditTagPopup = false;
   tagForm: FormGroup;
   tagsSubscription = new Subscription();
 
@@ -42,22 +43,21 @@ export class TagsComponent implements OnInit, OnDestroy {
     private readonly store: Store
   ) {
     this.tagForm = this.fb.group({
-      name: ['', Validators.required]
+      tagId: [],
+      tagName: ['', Validators.required]
     });
   }
 
-  get getName(): FormControl {
-    return this.tagForm.controls['name'] as FormControl;
+  get getTagId(): FormControl {
+    return this.tagForm.controls['tagId'] as FormControl;
+  }
+
+  get getTagName(): FormControl {
+    return this.tagForm.controls['tagName'] as FormControl;
   }
 
   ngOnInit(): void {
-    this.tagsSubscription = this.store.select(getAllTags).subscribe({
-      next: (tags: Array<Tags> | null) => {
-        if (tags) {
-          this.tags = tags;
-        }
-      }
-    });
+    this.getTags();
   }
 
   ngOnDestroy(): void {
@@ -73,49 +73,69 @@ export class TagsComponent implements OnInit, OnDestroy {
     }
   }
 
-  tagSelect($event: TreeNode): void {
-    this.store.dispatch(loadSelectedTag({ data: $event }));
+  getTags(): void {
+    this.tagsSubscription = this.store.select(getAllTags).subscribe({
+      next: (tags: Array<Tags> | null) => {
+        if (tags) {
+          this.tags = [...tags];
+        }
+      }
+    });
+  }
+
+  tagSelect($event: any): void {
+    this.store.dispatch(loadSelectedTag({ tags: $event }));
   }
 
   tagUnselect(): void {
-    this.selectedTag = null;
-    this.store.dispatch(loadSelectedTag({ data: null }));
+    this.selectedTag = [];
+    this.store.dispatch(loadSelectedTag({ tags: null }));
   }
 
   addTag(): void {
     this.tagUnselect();
-    this.openNewTagPopup();
-  }
-
-  openNewTagPopup(): void {
-    this.newTag = true;
+    this.showNewTagPopup = true;
     this.tagForm.reset();
-    this.getName.patchValue('');
+    this.getTagName.patchValue('');
   }
 
   createTag(): void {
-    const name: string = this.getName.value;
-    if (name.length <= this.constants.tagNameMinLength) {
-      this.newTag = false;
-      const tags = {} as Tag;
+    const name: string = this.getTagName.value;
+    if (name.length >= this.constants.tagNameMinLength) {
+      this.showNewTagPopup = false;
+      const tags = {} as Tags;
       tags.tagName = name;
-      this.store.dispatch(createTag({ data: tags }));
+      this.store.dispatch(createTag({ tags }));
     }
   }
 
-  deleteTag(): void {
-    if (this.selectedTag) {
-      this.confirmationService.confirm({
-        message: this.selectedTag ? this.selectedTag.label : '',
-        header: this.messages.tagsTable.deleteMetadata.header,
-        icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-          this.store.dispatch(
-            deleteTag({ data: this.selectedTag?.data.nodeId })
-          );
-          this.selectedTag = null;
-        }
-      });
+  editTag(tagId: string, tagName: string): void {
+    this.showEditTagPopup = true;
+    this.getTagId.patchValue(tagId);
+    this.getTagName.patchValue(tagName);
+  }
+
+  updateTag(): void {
+    const name: string = this.getTagName.value;
+    if (name.length >= this.constants.tagNameMinLength) {
+      this.showEditTagPopup = false;
+      const tags = {} as Tags;
+      tags.tagId = this.getTagId.value;
+      tags.tagName = name;
+      this.store.dispatch(updateTag({ tags }));
     }
+  }
+
+  deleteTag(tagId: string, tagName: string): void {
+    this.confirmationService.confirm({
+      message: tagName,
+      header: this.messages.tagsTable.deleteMetadata.header,
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.store.dispatch(deleteTag({ data: tagId }));
+        this.selectedTag = [];
+        this.getTags();
+      }
+    });
   }
 }

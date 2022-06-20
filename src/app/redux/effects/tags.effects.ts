@@ -6,7 +6,7 @@ import * as TagActions from '../actions/tags.actions';
 import { loadFiles } from '../actions/file.actions';
 import { catchError, map, of, switchMap } from 'rxjs';
 import { loadTagsApiSuccess } from '../actions/app.actions';
-import { Tag } from '../../interfaces/tag';
+import { Tags } from '../../interfaces/tags';
 import { SuccessResponse } from '../../interfaces/success-response';
 import { ResponseCode } from '../../enums/response-code';
 import { AppService } from '../../services/app.service';
@@ -21,13 +21,13 @@ export class TagsEffects {
       switchMap(() => {
         this.store.dispatch(loadTagsApiSuccess({ data: true }));
         return this.tagsService.getTags().pipe(
-          map((data: Array<Tag>) => {
+          map((tags: Array<Tags>) => {
             this.store.dispatch(loadTagsApiSuccess({ data: false }));
             this.appService.toast(
               this.messages.success,
               this.messages.apiRequests.files.success
             );
-            return TagActions.loadTagsSuccess({ data });
+            return TagActions.loadTagsSuccess({ tags });
           }),
           catchError((error: any) => {
             console.error(this.messages.apiRequests.files.failed, error);
@@ -49,7 +49,7 @@ export class TagsEffects {
       ofType(TagActions.createTag.type),
       switchMap((action: any) => {
         this.appService.showSpinner(this.messages.loading.createNode);
-        return this.tagsService.addTag(action.data).pipe(
+        return this.tagsService.addTag(action.tags.tagName).pipe(
           map((data: any) => {
             const success = false;
             if (data.responseCode === ResponseCode.sn201) {
@@ -129,7 +129,7 @@ export class TagsEffects {
       ofType(TagActions.updateTag.type),
       switchMap((action: any) => {
         this.appService.showSpinner(this.messages.loading.updateTags);
-        return this.tagsService.updateTag(action.data).pipe(
+        return this.tagsService.updateTag(action.tags).pipe(
           map((data: SuccessResponse) => {
             let success = false;
             if (data.responseCode === ResponseCode.sn201) {

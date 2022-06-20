@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Tag } from '../interfaces/tag';
+import { Tags } from '../interfaces/tags';
 
 @Injectable()
 export class TagsService {
@@ -20,8 +20,8 @@ export class TagsService {
   public docs: any[] = [];
   constructor(public http: HttpClient) {}
 
-  getTags = (): Observable<Array<Tag>> =>
-    this.http.get<Array<Tag>>(`${this.tagsAPI}/contentitemtag`);
+  getTags = (): Observable<Array<Tags>> =>
+    this.http.get<Array<Tags>>(`${this.tagsAPI}/contentitemtag`);
 
   public getDocs(): any {
     return this.http.get<any>(`${this.tagsAPI}/partnerportalnode`);
@@ -31,16 +31,16 @@ export class TagsService {
     return this.http.get<any>(`${this.tagsAPI}/contentitemtag${tagId}`);
   }
 
-  addTag(tag: any): Observable<Tag> {
+  addTag(tag: string): Observable<Tags> {
     const payload = JSON.stringify({
       tagName: tag
     });
-    return this.http.post<Tag>(`${this.baseAPI}contentstag/${tag}`, payload);
+    return this.http.post<Tags>(`${this.baseAPI}contentstag/${tag}`, payload);
   }
 
   updateTag(tag: any): Observable<any> {
     const payload = JSON.stringify({
-      tagIndex: tag.tagIndex,
+      tagIndex: '',
       tagName: tag.tagName,
       tagId: tag.tagId
     });

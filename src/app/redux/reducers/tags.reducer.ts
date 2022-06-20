@@ -4,8 +4,8 @@ import { loadTagsSuccess, loadSelectedTag } from '../actions/tags.actions';
 
 const metaReducer = createReducer(
   tagsInitialState,
-  on(loadTagsSuccess, (state, { data }) => ({ ...state, tag: data })),
-  on(loadSelectedTag, (state, { data }) => ({ ...state, selectedNode: data }))
+  on(loadTagsSuccess, (state, { tags }) => ({ ...state, tags })),
+  on(loadSelectedTag, (state, { tags }) => ({ ...state, selectedNode: tags }))
 );
 export const reducer = (state: TagsState | undefined, action: Action) =>
   metaReducer(state, action);

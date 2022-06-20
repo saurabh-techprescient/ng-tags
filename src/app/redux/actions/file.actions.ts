@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { File } from '../../interfaces/file';
 
 export const loadFiles = createAction('[File] Load Files');
 

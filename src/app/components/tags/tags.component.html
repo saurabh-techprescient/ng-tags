@@ -2,11 +2,11 @@
   <div class="title-section flex-row flex align-items-center justify-content-center">
     <h3>{{ messages.tagsTable.title }}</h3>
   </div>
-  <div class="flex-column flex align-items-stretch justify-content-start m-2 p-2 border-solid border-1">
+  <div class="flex-column flex align-items-stretch justify-content-start m-2 p-2">
     <p-table #dt [(selection)]="selectedTag" [globalFilterFields]="['tagName']" [paginator]="true" [rowHover]="true"
       [rows]="10" [showCurrentPageReport]="true" [value]="tags" styleClass="p-datatable-striped"
-      responsiveLayout="scroll" dataKey="tagId" [scrollHeight]="constants.tableScrollHeight"
-      (onNodeSelect)="tagSelect($event)" sortMode="multiple">
+      responsiveLayout="scroll" dataKey="tagId" [scrollHeight]="constants.tableScrollHeight" selectMode="single"
+      responsiveLayout="scroll" [rowSelectable]="true">
       <ng-template pTemplate="caption">
         <div class="float-left flex align-items-center justify-content-between flex-wrap mr-5">
           <span class="p-input-icon-left w-auto">
@@ -27,8 +27,8 @@
       </ng-template>
       <ng-template pTemplate="body" let-tag>
         <tr>
-          <td>{{ tag.tagName }}</td>
-          <td>
+          <td (click)="selectTag(tag)">{{ tag.tagName }}</td>
+          <td class="w-3rem">
             <span (click)="editTag(tag.tagId, tag.tagName)"
               class="p-button-icon p-button-icon-left pi pi-pencil mr-3 actions" aria-hidden="true"></span>
             <span (click)="deleteTag(tag.tagId, tag.tagName)"

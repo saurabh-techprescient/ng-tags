@@ -10,7 +10,6 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ChipsModule } from 'primeng/chips';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
-import { DragDropModule } from 'primeng/dragdrop';
 import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
@@ -26,7 +25,6 @@ import { FileUploadModule } from 'primeng/fileupload';
     RippleModule,
     MenuModule,
     ChipsModule,
-    DragDropModule,
     FileUploadModule,
     ToastModule
   ],
@@ -41,7 +39,6 @@ import { FileUploadModule } from 'primeng/fileupload';
     RippleModule,
     MenuModule,
     ChipsModule,
-    DragDropModule,
     FileUploadModule,
     ToastModule
   ]

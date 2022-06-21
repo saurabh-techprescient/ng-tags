@@ -29,7 +29,7 @@ export const deleteFileFailure = createAction(
 
 export const unlinkFile = createAction(
   '[File] Unlink File',
-  props<{ data: { metadataId: string; files: string[] } }>()
+  props<{ data: { tagId: string; files: string[] } }>()
 );
 export const unlinkFileSuccess = createAction(
   '[File] Unlink File Success',
@@ -71,7 +71,7 @@ export const createTagsFailure = createAction(
 
 export const uploadFiles = createAction(
   '[File] Upload Files',
-  props<{ data: { metadataId: string; files: string[] } }>()
+  props<{ data: { tagId: string; files: string[] } }>()
 );
 export const uploadFilesSuccess = createAction(
   '[File] Upload Files Success',

@@ -7,7 +7,7 @@ export const getAllTags = createSelector(
   (state: TagsState) => state.tags
 );
 
-export const getSelectedNode = createSelector(
+export const getSelectedTag = createSelector(
   tags,
   (state: TagsState) => state.selectedTag
 );

@@ -30,7 +30,7 @@ export class TagsComponent implements OnInit, OnDestroy {
   readonly messages = messages;
   readonly constants = constants;
   mainActionMenu = new Array<MenuItem>();
-  selectedTag = new Array<Tags>();
+  selectedTag: Tags | null = null;
   tags = new Array<Tags>();
   showNewTagPopup = false;
   showEditTagPopup = false;
@@ -83,12 +83,12 @@ export class TagsComponent implements OnInit, OnDestroy {
     });
   }
 
-  tagSelect($event: any): void {
-    this.store.dispatch(loadSelectedTag({ tags: $event }));
+  selectTag(tag: Tags): void {
+    this.store.dispatch(loadSelectedTag({ tags: tag }));
   }
 
   tagUnselect(): void {
-    this.selectedTag = [];
+    this.selectedTag = null;
     this.store.dispatch(loadSelectedTag({ tags: null }));
   }
 
@@ -133,7 +133,7 @@ export class TagsComponent implements OnInit, OnDestroy {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.store.dispatch(deleteTag({ data: tagId }));
-        this.selectedTag = [];
+        this.selectedTag = null;
         this.getTags();
       }
     });

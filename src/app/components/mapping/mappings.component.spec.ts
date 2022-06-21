@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { SelectedMetadataComponent } from './selected-metadata.component';
+import { MappingComponent } from './mapping.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { StoreModule } from '@ngrx/store';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -10,9 +9,9 @@ import { PrimeNgModule } from '../../prime-ng.module';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { metaReducers, reducers } from '../../redux';
 
-describe('SelectedMetadataComponent', () => {
-  let component: SelectedMetadataComponent;
-  let fixture: ComponentFixture<SelectedMetadataComponent>;
+describe('MappingComponent', () => {
+  let component: MappingComponent;
+  let fixture: ComponentFixture<MappingComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -25,13 +24,13 @@ describe('SelectedMetadataComponent', () => {
         FormsModule,
         PrimeNgModule
       ],
-      declarations: [SelectedMetadataComponent],
+      declarations: [MappingComponent],
       providers: [ConfirmationService, MessageService]
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SelectedMetadataComponent);
+    fixture = TestBed.createComponent(MappingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

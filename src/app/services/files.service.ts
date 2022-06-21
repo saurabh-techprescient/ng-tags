@@ -24,7 +24,7 @@ export class FilesService {
     this.http.get<Array<File>>(`${this.tagsAPI}/partnerportalnode`);
 
   public getTagDocs(tagId: string): any {
-    return this.http.get<any>(`${this.tagsAPI}/contentitemtag${tagId}`);
+    return this.http.get<any>(`${this.tagsAPI}/contentitemtag/${tagId}`);
   }
 
   addTag(tag: any): Observable<any> {
@@ -47,8 +47,8 @@ export class FilesService {
     return this.http.delete<any>(`${this.tagsAPI}/contentitemtag/${tagId}`);
   }
 
-  removeDocFromTag(data: any): Observable<any> {
-    return this.http.put<any>(
+  removeDocFromTag(data: File): Observable<any> {
+    return this.http.put<File>(
       `${this.tagsAPI}/contentitemtag/updatecontentitemtag`,
       data
     );

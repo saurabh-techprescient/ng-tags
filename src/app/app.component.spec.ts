@@ -3,7 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { TagsComponent } from './components/tags/tags.component';
 import { FileListComponent } from './components/file-list/file-list.component';
-import { SelectedMetadataComponent } from './components/selected-metadata/selected-metadata.component';
+import { MappingComponent } from './components/mapping/mapping.component';
 import { StoreModule } from '@ngrx/store';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -28,7 +28,7 @@ describe('AppComponent', () => {
         AppComponent,
         TagsComponent,
         FileListComponent,
-        SelectedMetadataComponent
+        MappingComponent
       ],
       providers: [ConfirmationService, MessageService]
     }).compileComponents();

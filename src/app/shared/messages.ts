@@ -55,26 +55,23 @@ export const messages = {
     failedUpload: 'Failed to upload file',
     viewTags: 'View Tags'
   },
-  selectedNode: {
+  selectedTag: {
     columns: {
       placeholders: {
         globalSearch: 'search...'
       },
-      name: 'Tag Name'
+      name: 'Name'
     },
     unlinkFile: {
       title: 'Unlink selected files',
-      header: 'Are you sure that you want to unlink?'
+      header: 'Are you sure that you want to unlink?',
+      unlink: 'Unlink'
     },
     noFiles: 'No files found!',
     title: 'Welcome',
     description:
-      '        To get begin select a tag from the left panel. Then link files\n' +
-      '        in using the one of the two options:',
-    pointOne: 'Drag single files from the right panel to the middle panel',
-    pointTwo:
-      ' Multi-select files by toggling the checkboxes, click the\n' +
-      '          "Actions" dropdown, and select "Associate with tag"'
+      'To get begin select a tag from the left panel. select files from the right panel' +
+      ' and click the "Link To Tag" at the top right corner of the right panel.'
   },
   buttons: {
     create: 'Create',

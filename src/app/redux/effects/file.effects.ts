@@ -40,51 +40,6 @@ export class FileEffects {
     )
   );
 
-  // unlinkFile$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(FileActions.unlinkFile.type),
-  //     switchMap((action: any) => {
-  //       this.appService.showSpinner(this.messages.loading.deleteFile);
-  //       return this.fileService
-  //         .unlinkFile(action.data.metadataId, action.data.files)
-  //         .pipe(
-  //           map((data: SuccessResponse) => {
-  //             const success = false;
-  //             if (data.responseCode === ResponseCode.sn205) {
-  //               this.store.dispatch(loadTags());
-  //               this.appService.toast(
-  //                 this.messages.success,
-  //                 this.messages.apiRequests.unlinkFile.success
-  //               );
-  //             } else {
-  //               console.error(
-  //                 this.messages.apiRequests.unlinkFile.failed,
-  //                 data
-  //               );
-  //               this.appService.toast(
-  //                 this.messages.failure,
-  //                 this.messages.apiRequests.unlinkFile.failed,
-  //                 'error'
-  //               );
-  //             }
-  //             this.appService.hideSpinner();
-  //             return FileActions.unlinkFileSuccess({ data: success });
-  //           }),
-  //           catchError((error: any) => {
-  //             console.error(this.messages.apiRequests.unlinkFile.failed, error);
-  //             this.appService.toast(
-  //               this.messages.failure,
-  //               this.messages.apiRequests.unlinkFile.failed,
-  //               'error'
-  //             );
-  //             this.appService.hideSpinner();
-  //             return of(FileActions.unlinkFileFailure({ error }));
-  //           })
-  //         );
-  //     })
-  //   )
-  // );
-
   readonly messages = messages;
 
   constructor(

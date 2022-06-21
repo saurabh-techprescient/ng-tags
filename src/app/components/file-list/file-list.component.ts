@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { getAllFiles } from '../../redux/selectors/file.selectors';
 import { ConfirmationService, MenuItem } from 'primeng/api';
-import { getSelectedNode } from '../../redux/selectors/tags.selectors';
+import { getSelectedTag } from '../../redux/selectors/tags.selectors';
 import { uploadFiles } from '../../redux/actions/file.actions';
 import { AppService } from '../../services/app.service';
 import { constants } from '../../shared/constants';
@@ -26,15 +26,15 @@ export class FileListComponent implements OnInit, OnDestroy {
   columnActionMenu = new Array<MenuItem>();
   selectedTag: any | null = null;
   filesSubscription = new Subscription();
-  selectedNodeSubscription = new Subscription();
+  selectedTagSubscription = new Subscription();
   fileDropSubscription = new Subscription();
   contextItem: File | undefined;
   tags: string[] | undefined;
   showViewTags = false;
+  isAssociated = false;
   tagsTitle = '';
   showAddTags = false;
   newTags: string[] | undefined;
-  draggedFile: File | undefined;
   showFileUploadPopup = false;
   uploadedFiles = new Array<File>();
   constructor(
@@ -44,18 +44,6 @@ export class FileListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.mainActionMenu = [
-      {
-        label: this.messages.buttons.action,
-        items: [
-          {
-            label: this.messages.filesTable.columns.actions.associatedMessage,
-            icon: 'pi pi-list',
-            command: () => this.associateAllWithMetadata()
-          }
-        ]
-      }
-    ];
     this.filesSubscription = this.store.select(getAllFiles).subscribe({
       next: (value: Array<File> | null) => {
         if (value) {
@@ -64,19 +52,17 @@ export class FileListComponent implements OnInit, OnDestroy {
         }
       }
     });
-    this.selectedNodeSubscription = this.store
-      .select(getSelectedNode)
-      .subscribe({
-        next: (value) => {
-          this.selectedTag = value;
-          this.updateActionMenu();
-        }
-      });
+    this.selectedTagSubscription = this.store.select(getSelectedTag).subscribe({
+      next: (value) => {
+        this.selectedTag = value;
+        this.updateActionMenu();
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.filesSubscription.unsubscribe();
-    this.selectedNodeSubscription.unsubscribe();
+    this.selectedTagSubscription.unsubscribe();
     this.fileDropSubscription.unsubscribe();
   }
 
@@ -90,30 +76,17 @@ export class FileListComponent implements OnInit, OnDestroy {
   }
 
   updateActionMenu(): void {
-    this.mainActionMenu.forEach((action) => {
-      const associated = action.items?.find(
-        (button) =>
-          button.label ===
-          this.messages.filesTable.columns.actions.associatedMessage
-      );
-      if (associated) {
-        associated.disabled =
-          this.selectedTag === null || this.selectedFiles.length === 0;
-      }
-    });
+    this.isAssociated =
+      this.selectedTag === null || this.selectedFiles.length === 0;
   }
 
-  dragStart(file: File): void {
-    this.draggedFile = file;
-  }
-
-  private associateAllWithMetadata(): void {
+  associateAllWithMetadata(): void {
     if (this.selectedFiles && this.selectedTag) {
       const files = new Array<string>();
       this.selectedFiles.forEach((file: File) => files.push(file.fileId));
       this.store.dispatch(
         uploadFiles({
-          data: { metadataId: this.selectedTag.data.nodeId, files }
+          data: { tagId: this.selectedTag.tagId, files }
         })
       );
     }

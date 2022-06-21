@@ -8,7 +8,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpClientInterceptor } from './interceptors/http-client.interceptor';
 import { NgModule } from '@angular/core';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { SelectedMetadataComponent } from './components/selected-metadata/selected-metadata.component';
+import { MappingComponent } from './components/mapping/mapping.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { metaReducers, reducers } from './redux';
 import { StoreModule } from '@ngrx/store';
@@ -31,7 +31,7 @@ import { TagsEffects } from './redux/effects/tags.effects';
     AppComponent,
     FileListComponent,
     TagsComponent,
-    SelectedMetadataComponent
+    MappingComponent
   ],
   imports: [
     BrowserModule,

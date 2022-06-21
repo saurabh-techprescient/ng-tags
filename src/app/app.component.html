@@ -1,31 +1,20 @@
 <section class="flex flex-column align-items-start justify-content-start">
   <!--  Title region-->
-  <div
-    class="full-width title-section flex-row flex align-items-center justify-content-center"
-  >
+  <div class="full-width title-section flex-row flex align-items-center justify-content-center">
     <h2>{{ messages.title }}</h2>
   </div>
   <!--  Content Region-->
   <div class="lg:flex-row flex-column flex align-items-stretch justify-content-evenly w-full">
     <!--    Meta Tree-->
-    <app-tags
-      class="lg:w-4 w-full m-2 mr-0 align-self-stretch border-1 border-solid"
-    ></app-tags>
+    <app-tags class="lg:w-4 w-full m-2 mr-0 align-self-stretch border-1 border-solid"></app-tags>
     <!--    Editor Region-->
-    <app-selected-metadata
-      class="lg:w-4 w-full m-2 align-self-stretch border-1 border-solid"
-    ></app-selected-metadata>
+    <app-mapping class="lg:w-4 w-full m-2 align-self-stretch border-1 border-solid"></app-mapping>
     <!--    File Selection-->
-    <app-file-list
-      class="lg:w-4 w-full m-2 ml-0 align-self-stretch border-1 border-solid"
-    ></app-file-list>
+    <app-file-list class="lg:w-4 w-full m-2 ml-0 align-self-stretch border-1 border-solid"></app-file-list>
   </div>
 </section>
 <ngx-spinner color="#fff" type="ball-scale-multiple">
   <p class="loading-text">{{ loadingText }}</p>
 </ngx-spinner>
-<p-confirmDialog
-  [style]="{ maxWidth: '400px', width: '100%' }"
-  [baseZIndex]="10000"
-></p-confirmDialog>
+<p-confirmDialog [style]="{ maxWidth: '400px', width: '100%' }" [baseZIndex]="10000"></p-confirmDialog>
 <p-toast></p-toast>

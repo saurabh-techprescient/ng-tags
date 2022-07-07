@@ -10,11 +10,11 @@ export class TagsService {
     environment.settingsProperty
   ];
   readonly baseAPI = this.windowData
-    ? this.windowData.ng_persona.baseAPI
+    ? this.windowData.ng_tags.baseAPI
     : 'http://localhost/itron';
 
   readonly tagsAPI = this.windowData
-    ? this.windowData.ng_persona.tagsAPI
+    ? this.windowData.ng_tags.tagsAPI
     : 'http://localhost/itron';
 
   public docs: any[] = [];

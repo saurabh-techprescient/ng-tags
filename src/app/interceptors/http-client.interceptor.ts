@@ -11,7 +11,7 @@ import { constants } from '../shared/constants';
 @Injectable()
 export class HttpClientInterceptor implements HttpInterceptor {
   readonly windowData = constants.windowData;
-  token = this.windowData ? this.windowData.ng_persona.OktaAccessToken : '';
+  token = this.windowData ? this.windowData.ng_tags.OktaAccessToken : '';
 
   intercept(
     request: HttpRequest<unknown>,

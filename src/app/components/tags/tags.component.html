@@ -1,80 +1,119 @@
-<style type="text/css">
-  #doc-search {
-    margin-bottom: 10px;
-    margin-top: 10px;
-    float: left;
-    width: 100%;
-  }
-  #tags {
-    max-height: 80vh;
-    float: left;
-    width: 100%;
-  }
-  .ng2-smart-action-multiple-select input {
-    width: 12px !important;
-  }
-  .users-list th {
-    font-weight: 700;
-    padding: 6px !important;
-  }
-  .ng2-smart-actions .form-control {
-    height: 20px !important;
-  }
-  .users-list td {
-    font-size: 1.12em !important;
-    margin: 0;
-    padding: .5em 1em;
-  }
-  .add-user-to-role {
-    float: left;
-    padding: 9px;
-    margin-top: -10px;
-    border-radius: 4px;
-  }
-  #tags ng2-smart-table-pager {
-    float: right;
-  }
-  .hide-action td {
-    color: #aaa !important;
-  }
-  .hide-action td:first-child {
-    pointer-events: none !important;
-    /* display: none; */
-  }
-  .hide-action td input {
-    opacity: 0.5;
-    pointer-events: none !important;
-  }
-  .hide-action td.ng2-smart-actions a {
-    pointer-events: none !important;
-    background-color: #db7477 !important;
-  }
-  .ng2-smart-sort-link
-  {
-    color: #000000!important;
-  }
-  .ng2-smart-pagination .page-link-prev,
-  .ng2-smart-pagination .page-link-next
-  {
-    font-size: 14px!important;
-  }
-</style>
-<h5 class="text-center">Documents</h5>
-<p>Select documents from the table below and click on "Add Selected To Tag" to assign to the selected tag.</p>
-<div *ngIf="filteredDocs.length > 0" id="tags" [ngBusy]="{busy: busy, delay: 100}">
-  <ng2-smart-table id="users-table" [settings]="settings" allowFiltering='true' allowPaging='true'
-    [source]="filteredDocs" (deleteConfirm)="onDeleteConfirm($event)" (custom)="checkValue($event)"
-    (edit)="onEdit($event)" (userRowSelect)="onUserRowSelect($event)">
-  </ng2-smart-table>
+<div class="flex flex-column justify-content-start align-items-stretch">
+  <div class="title-section flex-row flex align-items-center justify-content-center">
+    <h3>{{ messages.tagsTable.title }}</h3>
+  </div>
+  <div class="flex-column flex align-items-stretch justify-content-start m-2 p-2">
+    <p-table #dt [(selection)]="selectedTag" [globalFilterFields]="['tagName']" [paginator]="true" [rowHover]="true"
+      [rows]="10" [showCurrentPageReport]="true" [value]="tags" styleClass="p-datatable-striped"
+      responsiveLayout="scroll" dataKey="tagId" [scrollHeight]="constants.tableScrollHeight" selectMode="single"
+      responsiveLayout="scroll" [rowSelectable]="true">
+      <ng-template pTemplate="caption">
+        <div class="float-left flex align-items-center justify-content-between flex-wrap mr-5">
+          <span class="p-input-icon-left w-auto">
+            <i class="pi pi-search"></i>
+            <input (input)="globalFilter($event)" [placeholder]="
+              messages.filesTable.columns.placeholders.globalSearch
+            " pInputText type="text" class="w-full" />
+          </span>
+        </div>
+        <button pButton class="p-button-info" type="button" [label]="messages.tagsTable.addTag"
+          (click)="addTag()"></button>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th id="file-name">{{ messages.filesTable.columns.name }}</th>
+          <th id="file-name">{{ messages.buttons.action }}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-tag>
+        <tr>
+          <td (click)="selectTag(tag)">{{ tag.tagName }}</td>
+          <td class="w-3rem">
+            <span (click)="editTag(tag.tagId, tag.tagName)"
+              class="p-button-icon p-button-icon-left pi pi-pencil mr-3 actions" aria-hidden="true"></span>
+            <span (click)="deleteTag(tag.tagId, tag.tagName)"
+              class="p-button-icon p-button-icon-left pi pi-trash actions" aria-hidden="true"></span>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="2">
+            <p class="text-center">{{ messages.filesTable.noFiles }}</p>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </div>
 
-<table *ngIf="filteredDocs.length < 1">
-  <tr>
-    <th>Name</th>
-  </tr>
-  <tr>
-    <td colspan="3">No Data Found</td>
-  </tr>
-</table>
+<p-dialog [header]="messages.tagsTable.addTag" [(visible)]="showNewTagPopup" [modal]="true" [baseZIndex]="10000"
+  [draggable]="false" [resizable]="false" [style]="{ maxWidth: '400px', width: '100%' }">
+  <form [formGroup]="tagForm">
+    <label for="metadata-name">{{ messages.tagsTable.form.name }}</label>
+    <input class="w-full" id="metadata-name" pInputText type="text" [class.ng-invalid]="
+        getTagName.value?.length < constants.tagNameMinLength ||
+        (getTagName.touched && !getTagName.value?.length)
+      " formControlName="tagName" />
+    <div [class.justify-content-between]="
+        (getTagName.dirty && getTagName.touched && !getTagName.value?.length) ||
+        getTagName.value?.length < constants.tagNameMinLength
+      " class="flex flex-row justify-content-end align-items-center mt-2">
+      <small *ngIf="getTagName.dirty && getTagName.touched && !getTagName.value?.length"
+        class="block p-error w-auto mt-0" id="regex-input-validation-errors">{{
+        messages.tagsTable.form.formErrors.required }}</small>
+      <small *ngIf="getTagName.value?.length < constants.tagNameMinLength" class="block p-error w-auto mt-0">{{
+        messages.tagsTable.form.formErrors.metadataName.minLength }}</small>
+      <small [class.p-error]="
+          getTagName.value?.length < constants.tagNameMinLength
+        " class="block mt-0 w-auto" id="regex-input-help">{{ getTagName.value?.length || 0 }} /{{
+        constants.tagNameMinLength
+        }}</small>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <button pButton class="p-button-danger mr-2" type="button" [label]="messages.buttons.cancel"
+      (click)="showNewTagPopup = false"></button>
+    <button pButton (click)="createTag()" [label]="messages.buttons.create" class="p-button-success" [disabled]="
+        !getTagName.value.length ||
+        getTagName.value.length < constants.tagNameMinLength
+      "></button>
+  </ng-template>
+</p-dialog>
 
-<button *ngIf="filteredDocs.length > 0" class="btn btn-sm btn-primary btn-custom add-user-to-role" (click)="addToTag()">Add Selected To Tag</button>
+<p-dialog [header]="messages.tagsTable.editTag" [(visible)]="showEditTagPopup" [modal]="true" [baseZIndex]="10000"
+  [draggable]="false" [resizable]="false" [style]="{ maxWidth: '400px', width: '100%' }">
+  <form [formGroup]="tagForm">
+
+    <input class="w-full" id="tag-id" pInputText type="hidden" formControlName="tagId" />
+
+    <label for="tag-name">{{ messages.tagsTable.form.name }}</label>
+    <input class="w-full" id="tag-name" pInputText type="text" [class.ng-invalid]="
+        getTagName.value?.length < constants.tagNameMinLength ||
+        (getTagName.touched && !getTagName.value?.length)
+      " formControlName="tagName" />
+    <div [class.justify-content-between]="
+        (getTagName.dirty && getTagName.touched && !getTagName.value?.length) ||
+        getTagName.value?.length < constants.tagNameMinLength
+      " class="flex flex-row justify-content-end align-items-center mt-2">
+      <small *ngIf="getTagName.dirty && getTagName.touched && !getTagName.value?.length"
+        class="block p-error w-auto mt-0" id="regex-input-validation-errors">{{
+        messages.tagsTable.form.formErrors.required }}</small>
+      <small *ngIf="getTagName.value?.length < constants.tagNameMinLength" class="block p-error w-auto mt-0">{{
+        messages.tagsTable.form.formErrors.metadataName.minLength }}</small>
+      <small [class.p-error]="
+          getTagName.value?.length < constants.tagNameMinLength
+        " class="block mt-0 w-auto" id="regex-input-help">{{ getTagName.value?.length || 0 }} /{{
+        constants.tagNameMinLength
+        }}</small>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <button pButton class="p-button-danger mr-2" type="button" [label]="messages.buttons.cancel"
+      (click)="showEditTagPopup = false"></button>
+    <button pButton (click)="updateTag()" [label]="messages.buttons.update" class="p-button-success" [disabled]="
+        !getTagName.value.length ||
+        getTagName.value.length < constants.tagNameMinLength
+      "></button>
+  </ng-template>
+</p-dialog>

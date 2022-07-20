@@ -1,0 +1,57 @@
+<div class="flex flex-column justify-content-start align-items-stretch">
+  <ng-container *ngIf="selectedTag; else welcomeNote">
+    <div class="title-section flex-row flex align-items-center justify-content-center">
+      <h3>"{{ selectedTag.tagName }}"</h3>
+    </div>
+    <div class="flex-column flex align-items-stretch justify-content-start m-2 p-2" pDroppable="file" (onDrop)="drop()">
+      <p-table #dt [(selection)]="selectedFiles" [globalFilterFields]="['fileName']" [paginator]="true"
+        [rowHover]="true" [rows]="10" [scrollHeight]="constants.tableScrollHeight" [showCurrentPageReport]="true"
+        [value]="files" dataKey="fileId" responsiveLayout="scroll" styleClass="p-datatable-striped">
+        <ng-template pTemplate="caption">
+          <div class="flex align-items-center justify-content-between flex-wrap">
+            <span class="p-input-icon-left w-full">
+              <i class="pi pi-search"></i>
+              <input (input)="globalFilter($event)" [placeholder]="
+                  messages.selectedTag.columns.placeholders.globalSearch
+                " pInputText type="text" class="w-full" />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th id="linked-file-name">{{this.messages.selectedTag.columns.name}}</th>
+            <th id="linked-file-action" class="w-3rem">
+              {{this.messages.selectedTag.unlinkFile.unlink}}
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-file>
+          <tr>
+            <td>{{ file.name }}</td>
+            <td class="w-3rem">
+              <span _ngcontent-dfn-c39="" aria-hidden="true" (click)="unlinkFile(file)"
+                class="p-button-icon p-button-icon-left pi pi-trash actions"></span>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td [attr.colspan]="3">
+              <p class="text-center">{{ messages.selectedTag.noFiles }}</p>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </ng-container>
+  <ng-template #welcomeNote>
+    <div class="title-section flex-row flex align-items-center justify-content-center">
+      <h3>{{messages.selectedTag.title}}</h3>
+    </div>
+    <div class="m-2">
+      <p>
+        {{messages.selectedTag.description}}
+      </p>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,47 @@
+<div class="flex flex-column justify-content-start align-items-stretch">
+  <div class="title-section flex-row flex align-items-center justify-content-center">
+    <h3>{{ messages.filesTable.title }}</h3>
+  </div>
+  <div class="flex-column flex align-items-stretch justify-content-start m-2 p-2">
+    <p-table #dt [(selection)]="selectedFiles" [globalFilterFields]="['fileName']" [paginator]="true" [rowHover]="true"
+      [rows]="10" [showCurrentPageReport]="true" [value]="files" styleClass="p-datatable-striped"
+      responsiveLayout="scroll" dataKey="fileId" [scrollHeight]="constants.tableScrollHeight"
+      (selectionChange)="updateActionMenu()">
+      <ng-template pTemplate="caption">
+        <div class="flex align-items-center justify-content-between flex-wrap">
+          <span class="p-input-icon-left w-auto">
+            <i class="pi pi-search"></i>
+            <input (input)="globalFilter($event)" [placeholder]="
+              messages.filesTable.columns.placeholders.globalSearch
+            " pInputText type="text" class="w-full" />
+          </span>
+          <button [disabled]="isAssociated" class="p-element p-button-info p-button p-component ng-star-inserted"
+            (click)="associateAllWithMetadata()">Link To Tag</button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="w-3rem" id="select-all-checkbox">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th id="file-name">{{ messages.filesTable.columns.name }}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-file>
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="file"></p-tableCheckbox>
+          </td>
+          <td>{{ file.name }}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="3">
+            <p class="text-center">{{ messages.filesTable.noFiles }}</p>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

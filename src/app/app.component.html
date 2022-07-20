@@ -1,27 +1,20 @@
-<style type="text/css">
-  .disabled-link {
-    color: #cc8e8e;
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  #company-name {
-    margin-top: 20px;
-    padding-left: 20px;
-  }
-</style>
-
-<div class="persona-header row">
-  <div class="col-md-4">
+<section class="flex flex-column align-items-start justify-content-start">
+  <!--  Title region-->
+  <div class="full-width title-section flex-row flex align-items-center justify-content-center">
+    <h2>{{ messages.title }}</h2>
   </div>
-  <div class="col-md-4 text-center">
-    <ul id="permssion-tabs" class="ssni-topic-tabs">
-      <li role="presentation"
-          [class.active]="selected == 'role'">
-        <a (click)="selectRole()">Tags Management</a>
-      </li>
-    </ul>
+  <!--  Content Region-->
+  <div class="lg:flex-row flex-column flex align-items-stretch justify-content-evenly w-full">
+    <!--    Meta Tree-->
+    <app-tags class="lg:w-4 w-full m-2 mr-0 align-self-stretch border-1 border-solid"></app-tags>
+    <!--    Editor Region-->
+    <app-mapping class="lg:w-4 w-full m-2 align-self-stretch border-1 border-solid"></app-mapping>
+    <!--    File Selection-->
+    <app-file-list class="lg:w-4 w-full m-2 ml-0 align-self-stretch border-1 border-solid"></app-file-list>
   </div>
-</div>
-
-<persona-mgmt></persona-mgmt>
+</section>
+<ngx-spinner color="#fff" type="ball-scale-multiple">
+  <p class="loading-text">{{ loadingText }}</p>
+</ngx-spinner>
+<p-confirmDialog [style]="{ maxWidth: '400px', width: '100%' }" [baseZIndex]="10000"></p-confirmDialog>
+<p-toast></p-toast>

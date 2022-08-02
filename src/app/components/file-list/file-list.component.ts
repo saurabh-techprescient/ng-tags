@@ -10,6 +10,7 @@ import { uploadFiles } from '../../redux/actions/file.actions';
 import { AppService } from '../../services/app.service';
 import { constants } from '../../shared/constants';
 import { File } from '../../interfaces/file';
+import { FilesService } from '../../services/files.service';
 
 @Component({
   selector: 'app-file-list',
@@ -39,6 +40,7 @@ export class FileListComponent implements OnInit, OnDestroy {
   uploadedFiles = new Array<File>();
   constructor(
     private readonly store: Store,
+    private readonly filesService: FilesService,
     private readonly confirmationService: ConfirmationService,
     private readonly appService: AppService
   ) {}
@@ -83,12 +85,25 @@ export class FileListComponent implements OnInit, OnDestroy {
   associateAllWithMetadata(): void {
     if (this.selectedFiles && this.selectedTag) {
       const files = new Array<string>();
-      this.selectedFiles.forEach((file: File) => files.push(file.fileId));
+      this.selectedFiles.forEach((file: File) => files.push(file.externalId));
+      const docs = {
+        externalIds: files,
+        tags: [
+          {
+            tagId: this.selectedTag.tagId
+          }
+        ]
+      };
       this.store.dispatch(
         uploadFiles({
           data: { tagId: this.selectedTag.tagId, files }
         })
       );
+      this.filesService.addDocsToTag(docs).subscribe({
+        next: (value: any) => {
+          this.files = value;
+        }
+      });
     }
   }
 }

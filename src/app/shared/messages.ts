@@ -5,9 +5,9 @@ export const messages = {
     loadingText: 'Loading...',
     fileList: 'Loading files...',
     tags: 'Loading Tags...',
-    createNode: 'Creating new node...',
-    deleteNode: 'Deleting selected node...',
-    deleteFile: 'Deleting files...',
+    createNode: 'Creating new tag...',
+    deleteNode: 'Deleting selected tag...',
+    deleteFile: 'Deleting Tag...',
     unlinkFile: 'Unlinking file...',
     downloading: 'Downloading file...',
     updateTags: 'Updating file tags...',
@@ -87,9 +87,9 @@ export const messages = {
       success: 'Successfully fetched files!',
       failed: 'Failed to fetch files!'
     },
-    deleteFile: {
-      success: 'Successfully deleted the file!',
-      failed: 'Failed to delete the file!'
+    deleteTag: {
+      success: 'Successfully deleted the tag!',
+      failed: 'Failed to delete the tag!'
     },
     unlinkFile: {
       failed: 'Failed to unlink the file!',
@@ -108,7 +108,7 @@ export const messages = {
       success: 'Successfully updated the file tags!'
     },
     uploadFile: {
-      failed: 'Failed to upload the file!',
+      failed: 'Failed to upload the tag!',
       success: 'File uploaded successfully!'
     },
     fetchAllMetaNode: {

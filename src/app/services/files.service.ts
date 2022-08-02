@@ -47,8 +47,8 @@ export class FilesService {
     return this.http.delete<any>(`${this.tagsAPI}/contentitemtag/${tagId}`);
   }
 
-  removeDocFromTag(data: File): Observable<any> {
-    return this.http.put<File>(
+  removeDocFromTag(data: any): Observable<any> {
+    return this.http.put<any>(
       `${this.tagsAPI}/contentitemtag/updatecontentitemtag`,
       data
     );

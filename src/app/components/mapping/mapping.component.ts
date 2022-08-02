@@ -59,8 +59,16 @@ export class MappingComponent implements OnInit, OnDestroy {
 
   unlinkFile(file: File): void {
     if (this.selectedTag) {
+      const data = {
+        externalIds: [file.externalId],
+        tags: [
+          {
+            tagId: this.selectedTag.tagId
+          }
+        ]
+      };
       this.files = [];
-      this.filesService.removeDocFromTag(file).subscribe({
+      this.filesService.removeDocFromTag(data).subscribe({
         next: (value: any) => {
           this.files = value;
         }

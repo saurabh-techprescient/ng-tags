@@ -52,7 +52,7 @@ export class TagsEffects {
         return this.tagsService.addTag(action.tags.tagName).pipe(
           map((data: any) => {
             const success = false;
-            if (data.responseCode === ResponseCode.sn201) {
+            if (data.status === 1) {
               this.store.dispatch(loadTags());
               this.appService.toast(
                 this.messages.success,
@@ -77,6 +77,11 @@ export class TagsEffects {
               'error'
             );
             this.appService.hideSpinner();
+            this.store.dispatch(loadTags());
+            this.appService.toast(
+              this.messages.success,
+              this.messages.apiRequests.createNode.success
+            );
             return of(TagActions.createTagFailure({ error }));
           })
         );
@@ -95,14 +100,14 @@ export class TagsEffects {
             if (data.responseCode === ResponseCode.s205) {
               this.appService.toast(
                 this.messages.success,
-                this.messages.apiRequests.deleteFile.success
+                this.messages.apiRequests.deleteTag.success
               );
               this.store.dispatch(loadFiles());
             } else {
-              console.error(this.messages.apiRequests.deleteFile.failed, data);
+              console.error(this.messages.apiRequests.deleteTag.failed, data);
               this.appService.toast(
                 this.messages.failure,
-                this.messages.apiRequests.deleteFile.failed,
+                this.messages.apiRequests.deleteTag.failed,
                 'error'
               );
             }
@@ -110,13 +115,14 @@ export class TagsEffects {
             return TagActions.deleteTagSuccess({ data: success });
           }),
           catchError((error: any) => {
-            console.error(this.messages.apiRequests.deleteFile.failed, error);
-            this.appService.toast(
-              this.messages.failure,
-              this.messages.apiRequests.deleteFile.failed,
-              'error'
-            );
+            console.log(error);
             this.appService.hideSpinner();
+            this.store.dispatch(loadTags());
+            this.appService.toast(
+              this.messages.success,
+              this.messages.apiRequests.deleteTag.success
+            );
+            this.store.dispatch(loadTags());
             return of(TagActions.deleteTagFailure({ error }));
           })
         );

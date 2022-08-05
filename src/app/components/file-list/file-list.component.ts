@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { getAllFiles } from '../../redux/selectors/file.selectors';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { getSelectedTag } from '../../redux/selectors/tags.selectors';
-import { uploadFiles } from '../../redux/actions/file.actions';
+import { updateFiles } from '../../redux/actions/file.actions';
 import { AppService } from '../../services/app.service';
 import { constants } from '../../shared/constants';
 import { File } from '../../interfaces/file';
@@ -46,18 +46,22 @@ export class FileListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.getFiles();
+    this.selectedTagSubscription = this.store.select(getSelectedTag).subscribe({
+      next: (value) => {
+        this.selectedTag = value;
+        this.updateActionMenu();
+      }
+    });
+  }
+
+  getFiles() {
     this.filesSubscription = this.store.select(getAllFiles).subscribe({
       next: (value: Array<File> | null) => {
         if (value) {
           this.files = [];
           this.files = value;
         }
-      }
-    });
-    this.selectedTagSubscription = this.store.select(getSelectedTag).subscribe({
-      next: (value) => {
-        this.selectedTag = value;
-        this.updateActionMenu();
       }
     });
   }
@@ -95,13 +99,15 @@ export class FileListComponent implements OnInit, OnDestroy {
         ]
       };
       this.store.dispatch(
-        uploadFiles({
+        updateFiles({
           data: { tagId: this.selectedTag.tagId, files }
         })
       );
       this.filesService.addDocsToTag(docs).subscribe({
         next: (value: any) => {
           this.files = value;
+          this.selectedFiles = [];
+          this.getFiles();
         }
       });
     }

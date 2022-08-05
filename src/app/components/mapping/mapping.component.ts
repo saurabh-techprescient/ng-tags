@@ -10,6 +10,7 @@ import { FilesService } from '../../services/files.service';
 import { messages } from '../../shared/messages';
 import { Table } from 'primeng/table';
 import { constants } from '../../shared/constants';
+import { getLoadingText } from 'src/app/redux/selectors/app.selectors';
 
 @Component({
   selector: 'app-mapping',
@@ -25,6 +26,8 @@ export class MappingComponent implements OnInit, OnDestroy {
   dropped = new Array<any>();
   files = new Array<File>();
   selectedFiles = new Array<File>();
+  loadingTextSubscription = new Subscription();
+  loadingText = this.messages.loading.loadingText;
   constructor(
     private readonly store: Store,
     private readonly filesService: FilesService,
@@ -32,12 +35,7 @@ export class MappingComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.selectedTagSubscription = this.store.select(getSelectedTag).subscribe({
-      next: (value) => {
-        this.selectedTag = value;
-        this.updateFiles(this.selectedTag?.tagId);
-      }
-    });
+    this.getlinkedFiles();
   }
 
   ngOnDestroy(): void {
@@ -46,6 +44,15 @@ export class MappingComponent implements OnInit, OnDestroy {
 
   drop(): void {
     this.store.dispatch(fileDropped({ data: true }));
+  }
+
+  getlinkedFiles() {
+    this.selectedTagSubscription = this.store.select(getSelectedTag).subscribe({
+      next: (value) => {
+        this.selectedTag = value;
+        this.updateFiles(this.selectedTag?.tagId);
+      }
+    });
   }
 
   globalFilter($event: Event): void {
@@ -78,6 +85,9 @@ export class MappingComponent implements OnInit, OnDestroy {
 
   private updateFiles(tagId: any): void {
     this.files = [];
+    this.loadingTextSubscription = this.store.select(getLoadingText).subscribe({
+      next: (value) => (this.loadingText = value)
+    });
     this.filesService.getTagDocs(tagId).subscribe({
       next: (value: any) => {
         this.files = value;

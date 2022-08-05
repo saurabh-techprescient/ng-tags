@@ -12,7 +12,7 @@ export const messages = {
     downloading: 'Downloading file...',
     updateTags: 'Updating file tags...',
     createTags: 'Adding new tags...',
-    uploadAssociatedFiles: 'Uploading associated files...'
+    loadAssociatedFiles: 'Loading associated files...'
   },
   tagsTable: {
     title: 'Tags',

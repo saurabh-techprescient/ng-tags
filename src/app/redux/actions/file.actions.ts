@@ -69,16 +69,16 @@ export const createTagsFailure = createAction(
   props<{ error: any }>()
 );
 
-export const uploadFiles = createAction(
-  '[File] Upload Files',
+export const updateFiles = createAction(
+  '[File] Update Files',
   props<{ data: { tagId: string; files: string[] } }>()
 );
-export const uploadFilesSuccess = createAction(
-  '[File] Upload Files Success',
+export const updateFilesSuccess = createAction(
+  '[File] Update Files Success',
   props<{ data: boolean }>()
 );
 
-export const uploadFilesFailure = createAction(
-  '[File] Upload Files Failure',
+export const updateFilesFailure = createAction(
+  '[File] Update Files Failure',
   props<{ error: any }>()
 );

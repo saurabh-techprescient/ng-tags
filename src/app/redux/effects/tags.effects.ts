@@ -89,47 +89,6 @@ export class TagsEffects {
     )
   );
 
-  deleteTag$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(TagActions.deleteTag.type),
-      switchMap((action: any) => {
-        this.appService.showSpinner(this.messages.loading.deleteFile);
-        return this.tagsService.deleteTag(action.data).pipe(
-          map((data: SuccessResponse) => {
-            const success = false;
-            if (data.responseCode === ResponseCode.s205) {
-              this.appService.toast(
-                this.messages.success,
-                this.messages.apiRequests.deleteTag.success
-              );
-              this.store.dispatch(loadFiles());
-            } else {
-              console.error(this.messages.apiRequests.deleteTag.failed, data);
-              this.appService.toast(
-                this.messages.failure,
-                this.messages.apiRequests.deleteTag.failed,
-                'error'
-              );
-            }
-            this.appService.hideSpinner();
-            return TagActions.deleteTagSuccess({ data: success });
-          }),
-          catchError((error: any) => {
-            console.log(error);
-            this.appService.hideSpinner();
-            this.store.dispatch(loadTags());
-            this.appService.toast(
-              this.messages.success,
-              this.messages.apiRequests.deleteTag.success
-            );
-            this.store.dispatch(loadTags());
-            return of(TagActions.deleteTagFailure({ error }));
-          })
-        );
-      })
-    )
-  );
-
   updateTag$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TagActions.updateTag.type),
@@ -171,6 +130,50 @@ export class TagsEffects {
             );
             this.appService.hideSpinner();
             return of(TagActions.updateTagFailure({ error }));
+          })
+        );
+      })
+    )
+  );
+
+  deleteTag$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TagActions.deleteTag.type),
+      switchMap((action: any) => {
+        this.appService.showSpinner(this.messages.loading.deleteFile);
+        return this.tagsService.deleteTag(action.data).pipe(
+          map((data: SuccessResponse) => {
+            const success = false;
+            if (data.responseCode === ResponseCode.sn202) {
+              this.appService.toast(
+                this.messages.success,
+                this.messages.apiRequests.deleteTag.success
+              );
+              this.store.dispatch(loadTags());
+            } else {
+              console.error(
+                'Here-',
+                this.messages.apiRequests.deleteTag.failed,
+                data
+              );
+              this.appService.toast(
+                this.messages.failure,
+                this.messages.apiRequests.deleteTag.failed,
+                'error'
+              );
+            }
+            this.appService.hideSpinner();
+            return TagActions.deleteTagSuccess({ data: success });
+          }),
+          catchError((error: any) => {
+            this.appService.hideSpinner();
+            this.store.dispatch(loadTags());
+            this.appService.toast(
+              this.messages.success,
+              this.messages.apiRequests.deleteTag.success
+            );
+            this.store.dispatch(loadTags());
+            return of(TagActions.deleteTagFailure({ error }));
           })
         );
       })

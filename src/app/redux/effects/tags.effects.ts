@@ -97,24 +97,12 @@ export class TagsEffects {
         return this.tagsService.updateTag(action.tags).pipe(
           map((data: SuccessResponse) => {
             let success = false;
-            if (data.responseCode === ResponseCode.sn201) {
-              success = true;
-              this.store.dispatch(loadFiles());
-              this.appService.toast(
-                this.messages.success,
-                this.messages.apiRequests.updateFileTag.success
-              );
-            } else {
-              console.error(
-                this.messages.apiRequests.updateFileTag.failed,
-                data
-              );
-              this.appService.toast(
-                this.messages.failure,
-                this.messages.apiRequests.updateFileTag.failed,
-                'error'
-              );
-            }
+            success = true;
+            this.store.dispatch(loadTags());
+            this.appService.toast(
+              this.messages.success,
+              this.messages.apiRequests.updateFileTag.success
+            );
             this.appService.hideSpinner();
             return TagActions.updateTagSuccess({ data: success });
           }),

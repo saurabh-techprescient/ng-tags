@@ -38,12 +38,12 @@ export class TagsService {
     return this.http.post<Tags>(`${this.baseAPI}contentstag/${tag}`, payload);
   }
 
-  updateTag(tag: any): Observable<any> {
-    const payload = JSON.stringify({
+  updateTag(tag: Tags): Observable<any> {
+    const payload = {
       tagIndex: '',
       tagName: tag.tagName,
       tagId: tag.tagId
-    });
+    };
     return this.http.put<any>(`${this.tagsAPI}/contentitemtag/`, payload);
   }
 

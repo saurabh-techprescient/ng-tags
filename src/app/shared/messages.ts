@@ -20,6 +20,7 @@ export const messages = {
     editTag: 'Edit Tag',
     deleteTag: 'Delete Tag',
     clear: 'Clear',
+    noTags: 'No files found!',
     form: {
       name: 'Tag Name',
       formErrors: {

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { loadingText } from '../redux/actions/app.actions';
 import { Store } from '@ngrx/store';
 import { messages } from '../shared/messages';
 
@@ -15,13 +14,6 @@ export class AppService {
     private readonly spinner: NgxSpinnerService,
     private readonly store: Store
   ) {}
-
-  showSpinner(text?: string): void {
-    this.store.dispatch(
-      loadingText({ data: text || messages.loading.loadingText })
-    );
-    this.spinner.show().then();
-  }
 
   hideSpinner(): void {
     this.spinner.hide().then();

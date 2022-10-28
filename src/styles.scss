@@ -17,3 +17,16 @@
 {
     cursor: pointer;
 }
+.loading
+{
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    padding: 25%;
+    text-align: center;
+    background-color: rgba(51, 51, 51, 0.8);
+    z-index: 99999;
+    color: #ffffff;
+    font-size: 22px;
+}

@@ -3,7 +3,7 @@
     <div class="title-section flex-row flex align-items-center justify-content-center">
       <h3>"{{ selectedTag.tagName }}"</h3>
     </div>
-    <div class="flex-column flex align-items-stretch justify-content-start m-2 p-2" pDroppable="file" (onDrop)="drop()">
+    <div class="flex-column flex align-items-stretch justify-content-start m-2 p-2">
       <p-table #dt [(selection)]="selectedFiles" [globalFilterFields]="['fileName']" [paginator]="true"
         [rowHover]="true" [rows]="10" [scrollHeight]="constants.tableScrollHeight" [showCurrentPageReport]="true"
         [value]="files" dataKey="fileId" responsiveLayout="scroll" styleClass="p-datatable-striped">
@@ -54,4 +54,24 @@
       </p>
     </div>
   </ng-template>
+</div>
+
+<!--Delete model-->
+
+<p-dialog [baseZIndex]="10000" [closable]="false" [draggable]="false" [header]="messages.filesTable.removeFile"
+  [modal]="true" [resizable]="false" [style]="{ maxWidth: '500px', width: 'calc(100% - 2rem)' }"
+  [visible]="showDeletePopup">
+  <p>{{ messages.filesTable.removeFileMsg }} <strong>{{ selectedTagName }}?</strong>
+  </p>
+  <ng-template pTemplate="footer">
+    <button (click)="showDeletePopup=false" [label]="messages.buttons.cancel" class="p-button-danger"
+      pButton></button>
+    <button (click)="confirmUnlinkFile()" [label]="messages.buttons.delete" class="p-button-success mr-0"
+      pButton></button>
+  </ng-template>
+</p-dialog>
+
+<!--Loader-->
+<div *ngIf="isLoading" class="loading">
+  {{ messages.loadingText}}
 </div>

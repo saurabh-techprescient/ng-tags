@@ -1,23 +1,20 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ConfirmationService } from 'primeng/api';
 import { Tags } from '../../interfaces/tags';
-import { getSelectedTag } from '../../redux/selectors/tags.selectors';
-import { fileDropped } from '../../redux/actions/app.actions';
 import { File } from '../../interfaces/file';
 import { FilesService } from '../../services/files.service';
 import { messages } from '../../shared/messages';
 import { Table } from 'primeng/table';
 import { constants } from '../../shared/constants';
-import { getLoadingText } from 'src/app/redux/selectors/app.selectors';
+import { TagsService } from 'src/app/services/tags.service';
 
 @Component({
   selector: 'app-mapping',
   templateUrl: './mapping.component.html',
   styleUrls: ['./mapping.component.scss']
 })
-export class MappingComponent implements OnInit, OnDestroy {
+export class MappingComponent implements OnInit {
   @ViewChild('dt') dt: Table | undefined;
   readonly messages = messages;
   readonly constants = constants;
@@ -26,32 +23,36 @@ export class MappingComponent implements OnInit, OnDestroy {
   dropped = new Array<any>();
   files = new Array<File>();
   selectedFiles = new Array<File>();
-  loadingTextSubscription = new Subscription();
-  loadingText = this.messages.loading.loadingText;
+  selectedTagId = '';
+  selectedTagName = '';
+  isLoading = false;
+  showDeletePopup = false;
+  file?: File;
   constructor(
-    private readonly store: Store,
     private readonly filesService: FilesService,
+    private readonly tagsService: TagsService,
     private readonly confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
-    this.getlinkedFiles();
+    this.tagsService.selectedTag.subscribe((res) => {
+      this.selectedTag = res;
+      this.selectedTagId = res.tagId;
+      this.selectedTagName = res.tagName;
+      this.getlinkedFiles(this.selectedTagId);
+    });
+
+    this.filesService.selectedFiles.subscribe(() => {
+      console.log('Called');
+      this.getlinkedFiles(this.selectedTagId);
+    });
   }
 
-  ngOnDestroy(): void {
-    this.selectedTagSubscription.unsubscribe();
-  }
-
-  drop(): void {
-    this.store.dispatch(fileDropped({ data: true }));
-  }
-
-  getlinkedFiles() {
-    this.selectedTagSubscription = this.store.select(getSelectedTag).subscribe({
-      next: (value) => {
-        this.selectedTag = value;
-        this.updateFiles(this.selectedTag?.tagId);
-      }
+  getlinkedFiles(tagId: string) {
+    this.isLoading = true;
+    this.filesService.getTagDocs(tagId).subscribe((res: any) => {
+      this.files = res;
+      this.isLoading = false;
     });
   }
 
@@ -65,9 +66,16 @@ export class MappingComponent implements OnInit, OnDestroy {
   }
 
   unlinkFile(file: File): void {
+    this.file = file;
+    this.showDeletePopup = true;
+  }
+
+  confirmUnlinkFile(): void {
+    this.isLoading = true;
+    this.showDeletePopup = false;
     if (this.selectedTag) {
       const data = {
-        externalIds: [file.externalId],
+        externalIds: [this.file?.externalId],
         tags: [
           {
             tagId: this.selectedTag.tagId
@@ -75,23 +83,11 @@ export class MappingComponent implements OnInit, OnDestroy {
         ]
       };
       this.files = [];
-      this.filesService.removeDocFromTag(data).subscribe({
-        next: (value: any) => {
-          this.files = value;
-        }
+      this.filesService.removeDocFromTag(data).subscribe((value: any) => {
+        this.files = value;
+        this.getlinkedFiles(this.selectedTagId);
+        this.isLoading = false;
       });
     }
-  }
-
-  private updateFiles(tagId: any): void {
-    this.files = [];
-    this.loadingTextSubscription = this.store.select(getLoadingText).subscribe({
-      next: (value) => (this.loadingText = value)
-    });
-    this.filesService.getTagDocs(tagId).subscribe({
-      next: (value: any) => {
-        this.files = value;
-      }
-    });
   }
 }

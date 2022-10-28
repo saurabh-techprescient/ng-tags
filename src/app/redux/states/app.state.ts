@@ -16,6 +16,6 @@ export const appInitialState: AppState = {
     tags: false,
     fileList: false
   },
-  loadingText: messages.loading.loadingText,
+  loadingText: messages.loadingText,
   fileDrop: false
 };

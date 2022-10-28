@@ -117,3 +117,23 @@
       "></button>
   </ng-template>
 </p-dialog>
+
+<!--Delete model-->
+
+<p-dialog [baseZIndex]="10000" [closable]="false" [draggable]="false" [header]="messages.tagsTable.deleteTag"
+  [modal]="true" [resizable]="false" [style]="{ maxWidth: '500px', width: 'calc(100% - 2rem)' }"
+  [visible]="showDeleteTagPopup">
+  <p>{{ messages.tagsTable.deleteTagMsg }} <strong>{{ selectedTagName }}?</strong>
+  </p>
+  <ng-template pTemplate="footer">
+    <button (click)="showDeleteTagPopup=false" [label]="messages.buttons.cancel" class="p-button-danger"
+      pButton></button>
+    <button (click)="confirmDeleteTag()" [label]="messages.buttons.delete" class="p-button-success mr-0"
+      pButton></button>
+  </ng-template>
+</p-dialog>
+
+<!--Loader-->
+<div *ngIf="isLoading" class="loading">
+  {{ messages.loadingText}}
+</div>

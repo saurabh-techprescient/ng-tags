@@ -1,23 +1,16 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Tags } from '../../interfaces/tags';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { messages } from 'src/app/shared/messages';
 import { constants } from 'src/app/shared/constants';
+import { TagsService } from 'src/app/services/tags.service';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators
 } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import {
-  createTag,
-  deleteTag,
-  loadSelectedTag,
-  updateTag
-} from '../../redux/actions/tags.actions';
 import { Subscription } from 'rxjs';
-import { getAllTags } from '../../redux/selectors/tags.selectors';
 import { Table } from 'primeng/table';
 
 @Component({
@@ -25,7 +18,7 @@ import { Table } from 'primeng/table';
   templateUrl: './tags.component.html',
   styleUrls: ['./tags.component.scss']
 })
-export class TagsComponent implements OnInit, OnDestroy {
+export class TagsComponent implements OnInit {
   @ViewChild('dt') dt: Table | undefined;
   readonly messages = messages;
   readonly constants = constants;
@@ -33,14 +26,18 @@ export class TagsComponent implements OnInit, OnDestroy {
   selectedTag: Tags | null = null;
   tags = new Array<Tags>();
   showNewTagPopup = false;
+  isLoading = false;
   showEditTagPopup = false;
+  showDeleteTagPopup = false;
   tagForm: FormGroup;
+  selectedTagName = '';
+  selectedTagId = '';
   tagsSubscription = new Subscription();
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly confirmationService: ConfirmationService,
-    private readonly store: Store
+    private readonly tagsService: TagsService
   ) {
     this.tagForm = this.fb.group({
       tagId: [],
@@ -60,10 +57,6 @@ export class TagsComponent implements OnInit, OnDestroy {
     this.getTags();
   }
 
-  ngOnDestroy(): void {
-    this.tagsSubscription.unsubscribe();
-  }
-
   globalFilter($event: Event): void {
     if (this.dt) {
       this.dt.filterGlobal(
@@ -74,38 +67,29 @@ export class TagsComponent implements OnInit, OnDestroy {
   }
 
   getTags(): void {
-    this.tagsSubscription = this.store.select(getAllTags).subscribe({
-      next: (tags: Array<Tags> | null) => {
-        if (tags) {
-          this.tags = [...tags];
-        }
-      }
+    this.tagsService.getTags().subscribe((res: any) => {
+      this.tags = res;
     });
   }
 
   selectTag(tag: Tags): void {
-    this.store.dispatch(loadSelectedTag({ tags: tag }));
-  }
-
-  tagUnselect(): void {
-    this.selectedTag = null;
-    this.store.dispatch(loadSelectedTag({ tags: null }));
+    this.tagsService.updateSelectedTag(tag);
   }
 
   addTag(): void {
-    this.tagUnselect();
     this.showNewTagPopup = true;
     this.tagForm.reset();
     this.getTagName.patchValue('');
   }
 
   createTag(): void {
+    this.isLoading = true;
     const name: string = this.getTagName.value;
     if (name.length >= this.constants.tagNameMinLength) {
-      this.showNewTagPopup = false;
-      const tags = {} as Tags;
-      tags.tagName = name;
-      this.store.dispatch(createTag({ tags }));
+      this.tagsService.createTag(name).subscribe(() => {
+        this.getTags();
+        this.isLoading = false;
+      });
     }
   }
 
@@ -116,26 +100,33 @@ export class TagsComponent implements OnInit, OnDestroy {
   }
 
   updateTag(): void {
+    this.isLoading = true;
+    this.showEditTagPopup = false;
     const name: string = this.getTagName.value;
     if (name.length >= this.constants.tagNameMinLength) {
       this.showEditTagPopup = false;
       const tags = {} as Tags;
       tags.tagId = this.getTagId.value;
       tags.tagName = name;
-      this.store.dispatch(updateTag({ tags }));
+      this.tagsService.updateTag(tags).subscribe(() => {
+        this.getTags();
+        this.isLoading = false;
+      });
     }
   }
 
-  deleteTag(tagId: string, tagName: string): void {
-    this.confirmationService.confirm({
-      message: tagName,
-      header: this.messages.tagsTable.deleteMetadata.header,
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.store.dispatch(deleteTag({ data: tagId }));
-        this.selectedTag = null;
-        this.getTags();
-      }
+  deleteTag(tagId: string, tagName: string) {
+    this.selectedTagName = tagName;
+    this.selectedTagId = tagId;
+    this.showDeleteTagPopup = true;
+  }
+
+  confirmDeleteTag(): void {
+    this.isLoading = true;
+    this.showDeleteTagPopup = false;
+    this.tagsService.deleteTag(this.selectedTagId).subscribe(() => {
+      this.getTags();
+      this.isLoading = false;
     });
   }
 }

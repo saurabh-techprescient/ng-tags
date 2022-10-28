@@ -19,7 +19,7 @@ export class AppComponent implements OnInit, OnDestroy {
   readonly messages = messages;
   apiLoadingSubscription = new Subscription();
   loadingTextSubscription = new Subscription();
-  loadingText = this.messages.loading.loadingText;
+  loadingText = this.messages.loadingText;
   constructor(
     private readonly store: Store,
     private readonly spinner: NgxSpinnerService
@@ -34,17 +34,17 @@ export class AppComponent implements OnInit, OnDestroy {
         next: (value: { tags: boolean; fileList: boolean }) => {
           if (value.fileList || value.tags) {
             if (value.fileList) {
-              this.loadingText = this.messages.loading.fileList;
+              this.loadingText = this.messages.loadingText;
             }
             if (value.tags) {
-              this.loadingText = this.messages.loading.tags;
+              this.loadingText = this.messages.loadingText;
             }
             this.spinner.show().then();
           } else if (!value.fileList && !value.tags) {
             this.spinner.hide().then();
           }
           if (value.fileList && value.tags) {
-            this.loadingText = this.messages.loading.loadingText;
+            this.loadingText = this.messages.loadingText;
             this.spinner.show().then();
           }
         }

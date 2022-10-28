@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Tags } from '../interfaces/tags';
 
@@ -17,11 +17,19 @@ export class TagsService {
     ? this.windowData.ng_tags.tagsAPI
     : 'http://localhost/itron';
 
+  selectedTag: Subject<Tags> = new Subject<any>();
+  selectedTagDetails: Observable<Tags> = this.selectedTag.asObservable();
+
   public docs: any[] = [];
   constructor(public http: HttpClient) {}
 
-  getTags = (): Observable<Array<Tags>> =>
-    this.http.get<Array<Tags>>(`${this.tagsAPI}/contentitemtag`);
+  updateSelectedTag(tag: Tags) {
+    this.selectedTag.next(tag);
+  }
+
+  public getTags(): any {
+    return this.http.get<Array<Tags>>(`${this.tagsAPI}/contentitemtag`);
+  }
 
   public getDocs(): any {
     return this.http.get<any>(`${this.tagsAPI}/partnerportalnode`);
@@ -31,7 +39,7 @@ export class TagsService {
     return this.http.get<any>(`${this.tagsAPI}/contentitemtag${tagId}`);
   }
 
-  addTag(tag: string): Observable<Tags> {
+  createTag(tag: string): Observable<Tags> {
     const payload = JSON.stringify({
       tagName: tag
     });

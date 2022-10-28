@@ -1,24 +1,13 @@
 import { constants } from './constants';
 
 export const messages = {
-  loading: {
-    loadingText: 'Loading...',
-    fileList: 'Loading files...',
-    tags: 'Loading Tags...',
-    createNode: 'Creating new tag...',
-    deleteNode: 'Deleting selected tag...',
-    deleteFile: 'Deleting Tag...',
-    unlinkFile: 'Unlinking file...',
-    downloading: 'Downloading file...',
-    updateTags: 'Updating file tags...',
-    createTags: 'Adding new tags...',
-    loadAssociatedFiles: 'Loading associated files...'
-  },
+  loadingText: 'Please Wait...',
   tagsTable: {
     title: 'Tags',
     addTag: 'Add Tag',
     editTag: 'Edit Tag',
     deleteTag: 'Delete Tag',
+    deleteTagMsg: 'Are you sure you want to delete tag',
     clear: 'Clear',
     noTags: 'No files found!',
     form: {
@@ -48,6 +37,8 @@ export const messages = {
       },
       name: 'Name'
     },
+    removeFile: 'Remove File',
+    removeFileMsg: 'Are you sure you want to remove the file from tag',
     noFiles: 'No files found!',
     uploadButton: 'Upload',
     addTagsToSelectedFiles: 'Add Tags to selected Files',
@@ -78,6 +69,7 @@ export const messages = {
     create: 'Create',
     update: 'Update',
     cancel: 'Cancel',
+    delete: 'Delete',
     action: 'Actions'
   },
   success: 'Success!',

@@ -1,23 +1,20 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { messages } from '../../shared/messages';
 import { Table } from 'primeng/table';
-import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { getAllFiles } from '../../redux/selectors/file.selectors';
-import { ConfirmationService, MenuItem } from 'primeng/api';
-import { getSelectedTag } from '../../redux/selectors/tags.selectors';
-import { updateFiles } from '../../redux/actions/file.actions';
+import { MenuItem } from 'primeng/api';
 import { AppService } from '../../services/app.service';
 import { constants } from '../../shared/constants';
 import { File } from '../../interfaces/file';
 import { FilesService } from '../../services/files.service';
+import { TagsService } from 'src/app/services/tags.service';
 
 @Component({
   selector: 'app-file-list',
   templateUrl: './file-list.component.html',
   styleUrls: ['./file-list.component.scss']
 })
-export class FileListComponent implements OnInit, OnDestroy {
+export class FileListComponent implements OnInit {
   @ViewChild('dt') dt: Table | undefined;
   readonly messages = messages;
   readonly constants = constants;
@@ -35,28 +32,25 @@ export class FileListComponent implements OnInit, OnDestroy {
   isAssociated = false;
   tagsTitle = '';
   showAddTags = false;
+  isLoading = false;
   newTags: string[] | undefined;
   showFileUploadPopup = false;
   uploadedFiles = new Array<File>();
   constructor(
-    private readonly store: Store,
     private readonly filesService: FilesService,
-    private readonly confirmationService: ConfirmationService,
+    private readonly tagsService: TagsService,
     private readonly appService: AppService
   ) {}
 
   ngOnInit(): void {
-    this.getFiles();
-    this.selectedTagSubscription = this.store.select(getSelectedTag).subscribe({
-      next: (value) => {
-        this.selectedTag = value;
-        this.updateActionMenu();
-      }
+    this.tagsService.selectedTag.subscribe((res) => {
+      this.selectedTag = res;
     });
+    this.getDocs();
   }
 
-  getFiles() {
-    this.filesSubscription = this.store.select(getAllFiles).subscribe({
+  getDocs() {
+    this.filesService.getDocs().subscribe({
       next: (value: Array<File> | null) => {
         if (value) {
           this.files = [];
@@ -64,12 +58,6 @@ export class FileListComponent implements OnInit, OnDestroy {
         }
       }
     });
-  }
-
-  ngOnDestroy(): void {
-    this.filesSubscription.unsubscribe();
-    this.selectedTagSubscription.unsubscribe();
-    this.fileDropSubscription.unsubscribe();
   }
 
   globalFilter($event: Event): void {
@@ -88,6 +76,7 @@ export class FileListComponent implements OnInit, OnDestroy {
 
   associateAllWithMetadata(): void {
     if (this.selectedFiles && this.selectedTag) {
+      this.isLoading = true;
       const files = new Array<string>();
       this.selectedFiles.forEach((file: File) => files.push(file.externalId));
       const docs = {
@@ -98,16 +87,13 @@ export class FileListComponent implements OnInit, OnDestroy {
           }
         ]
       };
-      this.store.dispatch(
-        updateFiles({
-          data: { tagId: this.selectedTag.tagId, files }
-        })
-      );
       this.filesService.addDocsToTag(docs).subscribe({
         next: (value: any) => {
+          this.filesService.updateSelectedFiles(files);
           this.files = value;
           this.selectedFiles = [];
-          this.getFiles();
+          this.getDocs();
+          this.isLoading = false;
         }
       });
     }

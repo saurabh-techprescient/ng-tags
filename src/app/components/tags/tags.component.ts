@@ -83,6 +83,7 @@ export class TagsComponent implements OnInit {
   }
 
   createTag(): void {
+    this.showNewTagPopup = false;
     this.isLoading = true;
     const name: string = this.getTagName.value;
     if (name.length >= this.constants.tagNameMinLength) {

@@ -21,10 +21,6 @@ import { AppService } from './services/app.service';
 import { FilesService } from './services/files.service';
 import { GlobalService } from './services/global.service';
 import { TagsService } from './services/tags.service';
-/*Effects*/
-import { EffectsModule } from '@ngrx/effects';
-import { FileEffects } from './redux/effects/file.effects';
-import { TagsEffects } from './redux/effects/tags.effects';
 
 @NgModule({
   declarations: [
@@ -41,7 +37,6 @@ import { TagsEffects } from './redux/effects/tags.effects';
     ReactiveFormsModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
-    EffectsModule.forRoot([FileEffects, TagsEffects]),
     NgxSpinnerModule,
     FormsModule,
     PrimeNgModule

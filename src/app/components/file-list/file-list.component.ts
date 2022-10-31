@@ -30,6 +30,7 @@ export class FileListComponent implements OnInit {
   tags: string[] | undefined;
   showViewTags = false;
   isAssociated = false;
+  isTagSelected = false;
   tagsTitle = '';
   showAddTags = false;
   isLoading = false;
@@ -43,8 +44,11 @@ export class FileListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isAssociated = false;
+    this.isTagSelected = false;
     this.tagsService.selectedTag.subscribe((res) => {
       this.selectedTag = res;
+      this.isTagSelected = true;
     });
     this.getDocs();
   }
@@ -70,8 +74,11 @@ export class FileListComponent implements OnInit {
   }
 
   updateActionMenu(): void {
-    this.isAssociated =
-      this.selectedTag === null || this.selectedFiles.length === 0;
+    if (this.selectedTag === null || this.selectedFiles.length === 0) {
+      this.isAssociated = false;
+    } else {
+      this.isAssociated = true;
+    }
   }
 
   associateAllWithMetadata(): void {

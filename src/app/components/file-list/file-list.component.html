@@ -15,7 +15,7 @@
               messages.filesTable.columns.placeholders.globalSearch
             " pInputText type="text" class="w-full" />
           </span>
-          <button [disabled]="isAssociated" class="p-element p-button-info p-button p-component ng-star-inserted"
+          <button [disabled]="!isAssociated" class="p-element p-button-info p-button p-component ng-star-inserted"
             (click)="associateAllWithMetadata()">Link To Tag</button>
         </div>
       </ng-template>
@@ -30,7 +30,7 @@
       <ng-template pTemplate="body" let-file>
         <tr>
           <td>
-            <p-tableCheckbox [value]="file"></p-tableCheckbox>
+            <p-tableCheckbox [disabled]="!isTagSelected" [value]="file"></p-tableCheckbox>
           </td>
           <td>{{ file.name }}</td>
         </tr>

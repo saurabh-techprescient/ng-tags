@@ -60,17 +60,11 @@
         getTagName.value?.length < constants.tagNameMinLength
       " class="flex flex-row justify-content-end align-items-center mt-2">
       <small *ngIf="getTagName.dirty && getTagName.touched && !getTagName.value?.length"
-        class="block p-error w-auto mt-0" id="regex-input-validation-errors">{{
+        class="block p-error w-auto mt-0">{{
         messages.tagsTable.form.formErrors.required }}</small>
       <small *ngIf="getTagName.value?.length < constants.tagNameMinLength" class="block p-error w-auto mt-0">{{
         messages.tagsTable.form.formErrors.metadataName.minLength }}</small>
-      <small [class.p-error]="
-          getTagName.value?.length < constants.tagNameMinLength
-        " class="block mt-0 w-auto" id="regex-input-help">{{ getTagName.value?.length || 0 }} /{{
-        constants.tagNameMinLength
-        }}</small>
-
-      <small *ngIf="isDuplicate" class="block p-error w-auto mt-0" id="regex-input-validation-errors">{{
+      <small *ngIf="isDuplicate" class="block p-error w-auto mt-0">{{
         messages.tagsTable.duplicateTag }}</small>
     </div>
   </form>
@@ -100,16 +94,11 @@
         getTagName.value?.length < constants.tagNameMinLength
       " class="flex flex-row justify-content-end align-items-center mt-2">
       <small *ngIf="getTagName.dirty && getTagName.touched && !getTagName.value?.length"
-        class="block p-error w-auto mt-0" id="regex-input-validation-errors">{{
+        class="block p-error w-auto mt-0">{{
         messages.tagsTable.form.formErrors.required }}</small>
       <small *ngIf="getTagName.value?.length < constants.tagNameMinLength" class="block p-error w-auto mt-0">{{
         messages.tagsTable.form.formErrors.metadataName.minLength }}</small>
-      <small [class.p-error]="
-          getTagName.value?.length < constants.tagNameMinLength
-        " class="block mt-0 w-auto" id="regex-input-help">{{ getTagName.value?.length || 0 }} /{{
-        constants.tagNameMinLength
-        }}</small>
-      <small *ngIf="isDuplicate" class="block p-error w-auto mt-0" id="regex-input-validation-errors">{{
+      <small *ngIf="isDuplicate" class="block p-error w-auto mt-0">{{
         messages.tagsTable.duplicateTag }}</small>
     </div>
   </form>

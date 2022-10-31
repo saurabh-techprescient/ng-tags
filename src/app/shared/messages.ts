@@ -10,6 +10,7 @@ export const messages = {
     deleteTagMsg: 'Are you sure you want to delete tag',
     clear: 'Clear',
     noTags: 'No files found!',
+    duplicateTag: 'Tag already exists',
     form: {
       name: 'Tag Name',
       formErrors: {

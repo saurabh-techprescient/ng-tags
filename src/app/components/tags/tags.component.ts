@@ -29,6 +29,7 @@ export class TagsComponent implements OnInit {
   isLoading = false;
   showEditTagPopup = false;
   showDeleteTagPopup = false;
+  isDuplicate = false;
   tagForm: FormGroup;
   selectedTagName = '';
   selectedTagId = '';
@@ -83,14 +84,22 @@ export class TagsComponent implements OnInit {
   }
 
   createTag(): void {
-    this.showNewTagPopup = false;
-    this.isLoading = true;
+    this.isDuplicate = false;
     const name: string = this.getTagName.value;
     if (name.length >= this.constants.tagNameMinLength) {
-      this.tagsService.createTag(name).subscribe(() => {
-        this.getTags();
-        this.isLoading = false;
-      });
+      for (const tag of this.tags) {
+        if (tag.tagName === name) {
+          this.isDuplicate = true;
+        }
+      }
+      if (!this.isDuplicate) {
+        this.isLoading = true;
+        this.showNewTagPopup = false;
+        this.tagsService.createTag(name).subscribe(() => {
+          this.getTags();
+          this.isLoading = false;
+        });
+      }
     }
   }
 
@@ -101,18 +110,25 @@ export class TagsComponent implements OnInit {
   }
 
   updateTag(): void {
-    this.isLoading = true;
-    this.showEditTagPopup = false;
+    this.isDuplicate = false;
     const name: string = this.getTagName.value;
     if (name.length >= this.constants.tagNameMinLength) {
-      this.showEditTagPopup = false;
-      const tags = {} as Tags;
-      tags.tagId = this.getTagId.value;
-      tags.tagName = name;
-      this.tagsService.updateTag(tags).subscribe(() => {
-        this.getTags();
-        this.isLoading = false;
-      });
+      for (const tag of this.tags) {
+        if (tag.tagName === name) {
+          this.isDuplicate = true;
+        }
+      }
+      if (!this.isDuplicate) {
+        this.isLoading = true;
+        this.showEditTagPopup = false;
+        const tags = {} as Tags;
+        tags.tagId = this.getTagId.value;
+        tags.tagName = name;
+        this.tagsService.updateTag(tags).subscribe(() => {
+          this.getTags();
+          this.isLoading = false;
+        });
+      }
     }
   }
 

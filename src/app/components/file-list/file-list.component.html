@@ -3,7 +3,7 @@
     <h3>{{ messages.filesTable.title }}</h3>
   </div>
   <div class="flex-column flex align-items-stretch justify-content-start m-2 p-2">
-    <p-table #dt [(selection)]="selectedFiles" [globalFilterFields]="['fileName']" [paginator]="true" [rowHover]="true"
+    <p-table #dt [(selection)]="selectedFiles" [globalFilterFields]="['name']" [paginator]="true" [rowHover]="true"
       [rows]="10" [showCurrentPageReport]="true" [value]="files" styleClass="p-datatable-striped"
       responsiveLayout="scroll" dataKey="fileId" [scrollHeight]="constants.tableScrollHeight"
       (selectionChange)="updateActionMenu()">

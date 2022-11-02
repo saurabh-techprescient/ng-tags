@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Table } from 'primeng/table';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
   selector: 'app-tags',
@@ -38,6 +39,7 @@ export class TagsComponent implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
     private readonly confirmationService: ConfirmationService,
+    private readonly appService: AppService,
     private readonly tagsService: TagsService
   ) {
     this.tagForm = this.fb.group({
@@ -98,6 +100,7 @@ export class TagsComponent implements OnInit {
         this.tagsService.createTag(name).subscribe(() => {
           this.getTags();
           this.isLoading = false;
+          this.appService.toast('', 'Tag Created', 'success');
         });
       }
     }
@@ -127,6 +130,7 @@ export class TagsComponent implements OnInit {
         this.tagsService.updateTag(tags).subscribe(() => {
           this.getTags();
           this.isLoading = false;
+          this.appService.toast('', 'Tag Updated', 'success');
         });
       }
     }
@@ -144,6 +148,7 @@ export class TagsComponent implements OnInit {
     this.tagsService.deleteTag(this.selectedTagId).subscribe(() => {
       this.getTags();
       this.isLoading = false;
+      this.appService.toast('', 'Tag Deleted', 'success');
     });
   }
 }

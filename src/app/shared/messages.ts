@@ -27,7 +27,7 @@ export const messages = {
   filesTable: {
     columns: {
       placeholders: {
-        globalSearch: 'search...'
+        globalSearch: 'search'
       },
       actions: {
         associatedMessage: 'Associate with selected Tag',
@@ -51,7 +51,7 @@ export const messages = {
   selectedTag: {
     columns: {
       placeholders: {
-        globalSearch: 'search...'
+        globalSearch: 'search'
       },
       name: 'Name'
     },

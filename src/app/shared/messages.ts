@@ -38,12 +38,14 @@ export const messages = {
       },
       name: 'Name'
     },
+    title: 'All Files',
+    description:
+      'Select documents from the table below and click on "Add Selected To Tag" to assign to the selected tag.',
     removeFile: 'Remove File',
     removeFileMsg: 'Are you sure you want to remove the file from tag',
     noFiles: 'No files found!',
     uploadButton: 'Upload',
     addTagsToSelectedFiles: 'Add Tags to selected Files',
-    title: 'All Files',
     fileUpload: 'Upload Files',
     failedUpload: 'Failed to upload file',
     viewTags: 'View Tags'
@@ -63,6 +65,8 @@ export const messages = {
     noFiles: 'No files found!',
     title: 'Welcome',
     description:
+      'Documents listed in the table below are associated with the selected tag. Click ‘Delete’ to unlink.',
+    guidline:
       'To get begin select a tag from the left panel. select files from the right panel' +
       ' and click the "Link To Tag" at the top right corner of the right panel.'
   },

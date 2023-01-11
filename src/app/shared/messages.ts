@@ -38,7 +38,7 @@ export const messages = {
       },
       name: 'Name'
     },
-    title: 'All Files',
+    title: 'Documents',
     description:
       'Select documents from the table below and click on "Add Selected To Tag" to assign to the selected tag.',
     removeFile: 'Remove File',
